@@ -49,7 +49,6 @@ class TMCF {
     	load_plugin_textdomain( 'tm-gallery', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	}
 
-
 }
 
 TMCF::get_instance();

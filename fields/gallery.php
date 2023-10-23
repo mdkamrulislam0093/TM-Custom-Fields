@@ -12,8 +12,8 @@ class TM_Gallery {
 		$this->name = $name;
 		$this->location = $location;
 
-		add_action( 'admin_init', [$this, 'admin_meta_gallery']);	
-		add_action( 'save_post', [$this, 'save_gallery'] );
+		add_action( 'add_meta_boxes', [$this, 'admin_meta_gallery']);	
+		
 	}
 
 	public function admin_meta_gallery() {
@@ -63,32 +63,5 @@ class TM_Gallery {
 		<?php		
 	}
 
-	public function save_gallery($post_id) {
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
-
-		$is_autosave = wp_is_post_autosave( $post_id );
-		$is_revision = wp_is_post_revision( $post_id );
-		$is_valid_nonce = ( isset( $_POST[ 'tm_gallery_nonce' ] ) && wp_verify_nonce( $_POST[ 'tm_gallery_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
-		
-		if ( $is_autosave || $is_revision || !$is_valid_nonce ) {
-				return;
-		}
-
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			return;
-		}
-
-		if ( 'post' != $_POST['post_type'] ) {
-			return;
-		}
-
-		if ( isset($_POST['galleries']) && !empty($_POST['galleries']) ) {
-			$gallery = implode(',', $_POST['galleries']);
-			update_post_meta( $post_id, 'tm_galleries', $gallery);
-		} else {
-			update_post_meta( $post_id, 'tm_galleries', '');
-		}
-	}		
+			
 }

@@ -71,6 +71,18 @@ class TM_Settings {
 
 	}
 
+	public function fields_type() {
+		return [
+			'text' => 'Text',
+			'number' => 'Number',
+			'tel' => 'Tel',
+			'email' => 'Email',
+			'select' => 'Select',
+			'gallery' => 'Gallery',
+		];
+	}
+
+
 	public function getPostTypes() {
 		$all_post_types = get_post_types([
 		  'public'   => true,
@@ -79,35 +91,122 @@ class TM_Settings {
 		return array_diff( $all_post_types, [ 'attachment' ] );		
 	}
 
+
+
 	public function location_rules($post) {
 
-	$setting_location = !empty(get_post_meta( $post->ID, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $post->ID, 'tmcf_setting_location', true)) : [];
+		$setting_location = !empty(get_post_meta( $post->ID, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $post->ID, 'tmcf_setting_location', true)) : [];
 
-?>
-	<div class="location-rules">
-		<ul>
-			<?php foreach ($this->getPostTypes() as $key => $value):
-				?>
-				<li><label><input type="checkbox" id="post_type_<?= $key ?>" name="location[]" value="<?= $value ?>"
-				<?php checked( in_array($value, $setting_location), 1, true); ?>><?= $value ?></label></li>
-			<?php endforeach ?>
-		</ul>
-	</div>
+		?>
+			<div class="location-rules">
+				<ul>
+					<?php foreach ($this->getPostTypes() as $key => $value):
+						?>
+						<li><label><input type="checkbox" id="post_type_<?= $key ?>" name="location[]" value="<?= $value ?>"
+						<?php checked( in_array($value, $setting_location), 1, true); ?>><?= $value ?></label></li>
+					<?php endforeach ?>
+				</ul>
+			</div>
 
-<?php 
+		<?php 
 // var_dump();
 	}
 
 	public function setting_fields($post) {
 		$all_fields = get_option( 'tmcf_fields' );
-		$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? explode(',', get_post_meta( $post->ID, 'tmcf_setting_fields', true)) : [];
-?>
-<select name="tmcf_fields_list[]" style="width: 100%;" multiple>
-	<?php foreach ($all_fields as $value): ?>
-		<option <?php selected( in_array($value, $setting_fields), 1, true ); ?>><?= $value; ?></option>
-	<?php endforeach ?>
-</select>
-<?php 
+
+				$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : [];
+		?>
+<style type="text/css">
+	#TMCF_settings_fields_wrap tbody tr:nth-of-type(odd) {
+	  background: #eaeaea;
+	}
+	#TMCF_settings_fields_wrap tbody tr input {
+	  background: #fff;
+	  border: 1px solid #ddd;
+	  width: 69%;
+	  padding: 9px 15px;
+	  line-height: 1em;
+	}
+	#TMCF_settings_fields_wrap tbody tr select {
+	  background-color: #fff;
+	  border: 1px solid #ddd;
+	  padding: 4px 16px;
+	  width: 50%;
+	}
+	#TMCF_settings_fields_wrap .btn-wrap {
+		text-align: right;
+		margin-top: 10px;
+	}	
+</style>
+		<div id="TMCF_settings_fields_wrap">
+			<div class="sample-fields" style="display: none;">
+				<select>
+					<?php foreach ($this->fields_type() as $field_key => $field): ?>
+						<option value="<?= $field_key ?>"><?= $field; ?></option>						
+					<?php endforeach ?>
+				</select>
+			</div>
+
+			<div class="fields-wrap">
+				<table class="widefat">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Key</th>
+							<th>Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php 
+							if ( !empty($setting_fields) ) {
+								foreach ($setting_fields as $key => $item) {
+						?>
+							<tr class="<?= strtolower($item['type']); ?>">
+								<td><input type="text" name="tmcf_fields[<?= $key; ?>][name]" value="<?= $item['name']; ?>" placeholder="Name" class="name"></td>
+								<td><span class="key"><?= $item['key']; ?></span></td>
+								<td>
+									<select name="tmcf_fields[<?= $key; ?>][type]">
+										<?php foreach ($this->fields_type() as $field_key => $field): ?>
+											<option value="<?= $field_key ?>" <?= selected( $item['type'], $field_key ); ?>><?= $field; ?></option>						
+										<?php endforeach ?>
+									</select>
+								</td>
+							</tr>
+						<?php 
+								}
+							}
+
+						?>						
+					</tbody>
+				</table>
+			</div>
+			<div class="btn-wrap">
+				<button class="add button-primary">Add Field</button>				
+			</div>
+		</div>
+		<script type="text/javascript">
+			jQuery(document).ready(function($){
+				$('#TMCF_settings_fields_wrap .add').click(function(e){
+					e.preventDefault();
+
+					let indexElement = $(this).parents('#TMCF_settings_fields_wrap').find('.fields-wrap tbody tr').length;
+					$(this).parents('#TMCF_settings_fields_wrap').find('.fields-wrap tbody').append('<tr><td><input type="text" name="tmcf_fields['+ indexElement +'][name]" value="" placeholder="Name" class="name"></td><td><input type="text" name="tmcf_fields['+ indexElement +'][key]" value="" placeholder="Key" class="key" readonly></td> <td><select name="tmcf_fields['+ indexElement +'][type]">'+ $('.sample-fields select').html() +'</select></td></tr>');
+				});
+
+				$('#TMCF_settings_fields_wrap').on('blur', '.fields-wrap .name', function(e){
+					e.preventDefault();
+					let name = $(this).val();
+					let clean_name = name.replace(/['"]/g, "");
+					$(this).val(clean_name);
+
+
+					let clean_key = clean_name.replace(/\s/g,'');
+					$(this).parents('tr').find('.key').val(clean_key.toLowerCase());
+				});
+			});
+		</script>
+		<?php 
 	}
 
 
@@ -135,8 +234,8 @@ class TM_Settings {
 			update_post_meta( $post_id, 'tmcf_setting_location', implode(',', $_POST['location']));
 		}
 
-		if ( isset($_POST['tmcf_fields_list']) ) {
-			update_post_meta( $post_id, 'tmcf_setting_fields', implode(',', $_POST['tmcf_fields_list']));
+		if ( isset($_POST['tmcf_fields']) ) {
+			update_post_meta( $post_id, 'tmcf_setting_fields', json_encode($_POST['tmcf_fields']));
 		}
 	}
 

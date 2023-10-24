@@ -2,7 +2,7 @@
 /**
  * Plugin Name: TM Custom Fields
  * Plugin URI: #
- * Description: TMCF will help you to easily add custom fields in single post or page or custom post type.
+ * Description: TMCF will help you to easily add custom fields (Gallery, Text, Number) in single post or page or custom post type.
  * Version: 1.0
  * Requires at least: 5.7
  * Requires PHP: 7.2

@@ -36,9 +36,8 @@ class TMCF_Fields {
 		if ( ( $pagenow == 'post.php' || $pagenow == 'page.php' ) && isset($_GET['post']) && !empty($_GET['post']) ) {
 
 			if ( in_array(get_post_type($_GET['post']), $this->postTypes) ) {
-				wp_enqueue_style( 'tm_gallery_style', TMG_URL . '/assets/admin/css/style.css');
-				wp_enqueue_script( 'tm_gallery_script', TMG_URL . '/assets/admin/js/main.js', [ 'jquery', 'jquery-ui-sortable' ], '1.0', true );
-			}
+				wp_enqueue_style( 'tm_gallery_style', TMG_URL . 'assets/admin/css/style.css');
+				wp_enqueue_script( 'tm_gallery_script', TMG_URL . 'assets/admin/js/main.js', [ 'jquery', 'jquery-ui-sortable' ], '1.0', true );			}
 			
 		}
 	}
@@ -56,7 +55,6 @@ class TMCF_Fields {
 			$location = !empty(get_post_meta( $post_id, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $post_id, 'tmcf_setting_location', true)) : [];
 			$fields = !empty(get_post_meta( $post_id, 'tmcf_setting_fields', true)) ? json_decode(get_post_meta( $post_id, 'tmcf_setting_fields', true), true) : [];
 
-
 			if ( isset($_GET['post']) && in_array(get_post_type($_GET['post']), $location) ) {
 
 				foreach ($fields as $field) {
@@ -67,9 +65,7 @@ class TMCF_Fields {
 						$location,
 						'normal',
 						'core',
-						[
-							
-						]
+						$field
 					);
 				}
 
@@ -77,20 +73,62 @@ class TMCF_Fields {
 		}
 	}
 
+	public function text($post, $args) {
+		$text = !empty(get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true )) ? get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true ) : '';
+	?>
+		<div class="text_wrapper">
+			<input class="widefat" type="text" name="<?= $args['args']['key']; ?>" value="<?= $text; ?>">
+		</div>
+	<?php 
+	}
 
-	public function gallery($post) {
-		wp_nonce_field( basename(__FILE__), 'tm_gallery_nonce' );
+	public function tel($post, $args) {
+		$tel = !empty(get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true )) ? get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true ) : '';
+	?>
+		<div class="text_wrapper">
+			<input class="widefat" type="tel" name="<?= $args['args']['key']; ?>" value="<?= $tel; ?>">
+		</div>
+	<?php 
+	}
 
-		$gallery = !empty(get_post_meta( $post->ID, 'tm_galleries', true )) ? explode(',', get_post_meta( $post->ID, 'tm_galleries', true )) : [];
+	public function email($post, $args) {
+		$email = !empty(get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true )) ? get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true ) : '';
+	?>
+		<div class="text_wrapper">
+			<input class="widefat" type="email" name="<?= $args['args']['key']; ?>" value="<?= $email; ?>">
+		</div>
+	<?php 
+	}
+
+	public function number($post, $args) {
+		$number = !empty(get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true )) ? get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true ) : '';
+	?>
+		<div class="text_wrapper">
+			<input class="widefat" type="number" name="<?= $args['args']['key']; ?>" value="<?= $number; ?>">
+		</div>
+	<?php 
+	}
+
+	public function color($post, $args) {
+		$color = !empty(get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true )) ? get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true ) : '';
+	?>
+		<div class="text_wrapper">
+			<input type="color" name="<?= $args['args']['key']; ?>" value="<?= $color; ?>">
+		</div>
+	<?php 
+	}
+
+	public function gallery($post, $args) {
+		$gallery = !empty(get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true )) ? explode(',', get_post_meta( $post->ID, sprintf('tm_%s', $args['args']['key']), true )) : [];
 		?>
-		<div id="gallery_wrapper">
+		<div class="gallery_wrapper" data-name="<?= $args['args']['key']; ?>">
 			<div class="img_box_container">
 			<?php foreach ($gallery as $item): 
 				$image_url = wp_get_attachment_image_src( $item );
 				?>
 					<div class="gallery_single_row">
 						<div class="gallery_area image_container">
-							<input class="meta_image_id" value="<?= $item; ?>" type="hidden" name="galleries[]" />
+							<input class="meta_image_id" value="<?= $item; ?>" type="hidden" name="<?= $args['args']['key']; ?>[]" />
 							<img class="gallery_img_url" src="<?= $image_url[0]; ?>" height="55" width="55"/>
 						</div>
 						<span class="button remove" title="Remove">
@@ -104,10 +142,10 @@ class TMCF_Fields {
 			<?php endforeach ?>
 			</div>
 
-			<div id="master_box">
+			<div class="master_box">
 				<div class="img_box_container"></div>
 			</div>
-			<div id="add_gallery_single_row">
+			<div class="add_gallery_single_row">
 			  <input class="button add" type="button" value="+" title="Add image"/>
 			</div>
 		</div>
@@ -116,17 +154,14 @@ class TMCF_Fields {
 
 
 	public function save_fields($post_id) {
-		error_log('message');
-
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
 
 		$is_autosave = wp_is_post_autosave( $post_id );
 		$is_revision = wp_is_post_revision( $post_id );
-		$is_valid_nonce = ( isset( $_POST[ 'tm_gallery_nonce' ] ) && wp_verify_nonce( $_POST[ 'tm_gallery_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
 		
-		if ( $is_autosave || $is_revision || !$is_valid_nonce ) {
+		if ( $is_autosave || $is_revision ) {
 				return;
 		}
 
@@ -134,16 +169,31 @@ class TMCF_Fields {
 			return;
 		}
 
-		if ( !isset($_POST['post_type']) && 'post' != $_POST['post_type'] ) {
-			return;
+
+		foreach ($this->get_settings_data() as $settings_id) {
+
+			$fields = !empty(get_post_meta( $settings_id, 'tmcf_setting_fields', true)) ? json_decode(get_post_meta( $settings_id, 'tmcf_setting_fields', true), true) : [];
+			$location = !empty(get_post_meta( $settings_id, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $settings_id, 'tmcf_setting_location', true)) : [];
+
+			if ( isset($_POST['post_type']) && in_array($_POST['post_type'], $location) ) {
+				foreach ($fields as $field) {
+					// Gallary
+					if ( isset($_POST[$field['key']]) && !empty($_POST[$field['key']]) && $field['type'] == 'gallery' ) {
+						$gallery = implode(',', $_POST[$field['key']]);
+						update_post_meta( $post_id, sprintf('tm_%s', $field['key']), $gallery);
+					} 
+
+					// Text, Number, Tel, Email, Color
+					if ( isset($_POST[$field['key']]) && !empty($_POST[$field['key']]) && in_array($field['type'], ['text', 'number', 'tel', 'email', 'color']) ) {
+						update_post_meta( $post_id, sprintf('tm_%s', $field['key']), $_POST[$field['key']]);
+					} 
+
+
+				}
+			}
+
 		}
 
-		if ( isset($_POST['galleries']) && !empty($_POST['galleries']) ) {
-			$gallery = implode(',', $_POST['galleries']);
-			update_post_meta( $post_id, 'tm_galleries', $gallery);
-		} else {
-			delete_post_meta( $post_id, 'tm_galleries' );
-		}
 	}
 }
 

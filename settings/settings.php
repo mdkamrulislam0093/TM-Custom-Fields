@@ -79,6 +79,7 @@ class TM_Settings {
 			'email' => 'Email',
 			'select' => 'Select',
 			'gallery' => 'Gallery',
+			'color' => 'Color',
 		];
 	}
 
@@ -164,7 +165,7 @@ class TM_Settings {
 						?>
 							<tr class="<?= strtolower($item['type']); ?>">
 								<td><input type="text" name="tmcf_fields[<?= $key; ?>][name]" value="<?= $item['name']; ?>" placeholder="Name" class="name"></td>
-								<td><span class="key"><?= $item['key']; ?></span></td>
+								<td><input type="text" name="tmcf_fields[<?= $key; ?>][key]" value="<?= $item['key']; ?>" placeholder="Key" class="key" readonly></td>
 								<td>
 									<select name="tmcf_fields[<?= $key; ?>][type]">
 										<?php foreach ($this->fields_type() as $field_key => $field): ?>
@@ -176,7 +177,6 @@ class TM_Settings {
 						<?php 
 								}
 							}
-
 						?>						
 					</tbody>
 				</table>

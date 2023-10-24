@@ -1,11 +1,11 @@
-#gallery_wrapper .image_container {
+.gallery_wrapper .image_container {
 	background: url('https://i.hizliresim.com/dOJ6qL.png');
 	background-repeat: no-repeat;
 	background-size: cover;
 	border-radius: 3px;
 	cursor: pointer;
 }
-#gallery_wrapper .image_container img {
+.gallery_wrapper .image_container img {
 	height: 100%;
 	width: 100%;
 	border-radius: 3px;
@@ -14,25 +14,25 @@
 .clear {
 	clear:both;
 }
-#gallery_wrapper {
+.gallery_wrapper {
 	width: 100%;
 	height: auto;
 	position: relative;
 	display: flex;
 	flex-wrap: wrap;
 }
-#gallery_wrapper .img_box_container {
+.gallery_wrapper .img_box_container {
 	display: flex;
 	flex-wrap: wrap;
 }	
-#gallery_wrapper .gallery_single_row {
+.gallery_wrapper .gallery_single_row {
 	width: 100px;
 	height: 100px;
 	position: relative;
 	margin-right: 8px;
 	margin-bottom: 8px;
 }
-#gallery_wrapper .button.remove {
+.gallery_wrapper .button.remove {
 	background: none;
 	color: #f1f1f1;
 	position: absolute;
@@ -44,11 +44,11 @@
 	box-shadow: none;
 	z-index: 999;
 }
-#gallery_wrapper .button.remove:hover {
+.gallery_wrapper .button.remove:hover {
 	background: none;
 	color: #fff;
 }
-#gallery_wrapper .button.add {
+.gallery_wrapper .button.add {
 	background: #c3c2c2;
 	color: #ffffff;
 	border: none;
@@ -58,15 +58,15 @@
 	line-height: 100px;
 	font-size: 4em;
 }
-#gallery_wrapper .button.add:hover, .button.add:focus {
+.gallery_wrapper .button.add:hover, .button.add:focus {
 	background: #e2e2e2;
 	box-shadow: none;
 	color: #0f88c1;
 	border: none;
 }
-#gallery_wrapper .button.remove path {
+.gallery_wrapper .button.remove path {
 	fill: #ff4343;
 }	
-#master_box {
+.master_box {
 	display: none;
 }

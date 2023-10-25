@@ -31,14 +31,10 @@ class TMCF_Fields {
 	}
 
 	public function post_enqueue() {
-		global $pagenow;
 
-		if ( ( $pagenow == 'post.php' || $pagenow == 'page.php' ) && isset($_GET['post']) && !empty($_GET['post']) ) {
-
-			if ( in_array(get_post_type($_GET['post']), $this->postTypes) ) {
-				wp_enqueue_style( 'tm_gallery_style', TMG_URL . 'assets/admin/css/style.css');
-				wp_enqueue_script( 'tm_gallery_script', TMG_URL . 'assets/admin/js/main.js', [ 'jquery', 'jquery-ui-sortable' ], '1.0', true );			}
-			
+		if ( !empty(get_current_screen()) && in_array(get_current_screen()->post_type, $this->postTypes) ) {
+			wp_enqueue_style( 'tm_gallery_style', TMG_URL . 'assets/admin/css/style.css');
+			wp_enqueue_script( 'tm_gallery_script', TMG_URL . 'assets/admin/js/main.js', [ 'jquery', 'jquery-ui-sortable' ], '1.0', true );
 		}
 	}
 
@@ -51,11 +47,13 @@ class TMCF_Fields {
 	}
 
 	public function meta_boxes() {
+
 		foreach ($this->get_settings_data() as $post_id) {
 			$location = !empty(get_post_meta( $post_id, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $post_id, 'tmcf_setting_location', true)) : [];
 			$fields = !empty(get_post_meta( $post_id, 'tmcf_setting_fields', true)) ? json_decode(get_post_meta( $post_id, 'tmcf_setting_fields', true), true) : [];
+			error_log(print_r($_GET['post'], true));
 
-			if ( isset($_GET['post']) && in_array(get_post_type($_GET['post']), $location) ) {
+			if ( !empty( $location ) && !empty( $fields) ) {
 				$meta_id = sprintf('tmcf_%s', $post_id);
 
 				add_meta_box(

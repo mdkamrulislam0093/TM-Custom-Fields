@@ -27,12 +27,12 @@ class TM_Settings {
 	}
 
 	public function post_enqueue() {
-		global $post_type;
 
-		if ( 'tmcf_settings' == $post_type  ) {
+		if ( !empty(get_current_screen()) && get_current_screen()->post_type == 'tmcf_settings' ) {
 			wp_enqueue_style( 'tm_settings_style', TMG_URL . 'assets/settings/css/style.css');
 			wp_enqueue_script( 'tm_settings_script', TMG_URL . 'assets/settings/js/settings.js', [ 'jquery' ], '1.0', true );
 		}
+
 	}
 
 
@@ -109,8 +109,7 @@ class TM_Settings {
 	}
 
 	public function setting_fields($post) {
-		$all_fields = get_option( 'tmcf_fields' );
-
+		
 		$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : [];
 		?>
 		<div id="TMCF_settings_fields_wrap">
@@ -178,7 +177,7 @@ class TM_Settings {
 			return;
 		}
 
-		if ( 'tmcf_settings' != $_POST['post_type'] ) {
+		if ( isset($_POST['post_type']) && 'tmcf_settings' != $_POST['post_type'] ) {
 			return;
 		}
 

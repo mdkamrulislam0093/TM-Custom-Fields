@@ -1,3 +1,17 @@
+
+.tmcf_field_wrapper .tmcf_field {
+  padding: 16px 0;
+  border-bottom: 1px solid #ddd;
+}
+.tmcf_field_wrapper .tmcf_field label {
+  font-weight: 500;
+  padding-bottom: 20px;
+}
+.tmcf_field_wrapper .tmcf_field input.widefat {
+  padding: 3px 14px;
+}
+
+
 .gallery_wrapper .image_container {
 	background: url('https://i.hizliresim.com/dOJ6qL.png');
 	background-repeat: no-repeat;

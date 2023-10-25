@@ -27,7 +27,7 @@ define('TMG_URL', plugin_dir_url(__FILE__));
 
 
 include_once TMG_PATH .'/settings/settings.php';
-include_once TMG_PATH .'/fields/main.php';
+include_once TMG_PATH .'/inc/fields.php';
 
 class TMCF {
 

@@ -1,0 +1,26 @@
+.location-rules label {
+  text-transform: capitalize;
+}
+.location-rules label input {
+  margin-right: 10px;
+}
+#TMCF_settings_fields_wrap tbody tr:nth-of-type(odd) {
+  background: #eaeaea;
+}
+#TMCF_settings_fields_wrap tbody tr input {
+  background: #fff;
+  border: 1px solid #ddd;
+  width: 69%;
+  padding: 9px 15px;
+  line-height: 1em;
+}
+#TMCF_settings_fields_wrap tbody tr select {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 4px 16px;
+  width: 50%;
+}
+#TMCF_settings_fields_wrap .btn-wrap {
+  text-align: right;
+  margin-top: 10px;
+} 

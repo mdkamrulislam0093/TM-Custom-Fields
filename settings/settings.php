@@ -22,7 +22,6 @@ class TM_Settings {
 		add_action( 'add_meta_boxes', [$this, 'settings_metabox']);
 		add_action( 'save_post', [$this, 'save_settings'] );
 
-
 		add_action( 'admin_print_scripts-post-new.php', [$this, 'post_enqueue']);	
 		add_action( 'admin_print_scripts-post.php', [$this, 'post_enqueue']);	
 	}
@@ -31,8 +30,8 @@ class TM_Settings {
 		global $post_type;
 
 		if ( 'tmcf_settings' == $post_type  ) {
-			wp_enqueue_style( 'tm_settings_style', TMG_URL . 'assets/admin/settings/css/style.css');
-			// wp_enqueue_script( 'tm_gallery_script', TMG_URL . '/assets/admin/settings/js/main.js', [ 'jquery', 'jquery-ui-sortable' ], '1.0', true );
+			wp_enqueue_style( 'tm_settings_style', TMG_URL . 'assets/settings/css/style.css');
+			wp_enqueue_script( 'tm_settings_script', TMG_URL . 'assets/settings/js/settings.js', [ 'jquery' ], '1.0', true );
 		}
 	}
 
@@ -77,7 +76,7 @@ class TM_Settings {
 			'number' => 'Number',
 			'tel' => 'Tel',
 			'email' => 'Email',
-			'select' => 'Select',
+			// 'select' => 'Select',
 			'gallery' => 'Gallery',
 			'color' => 'Color',
 		];
@@ -95,9 +94,7 @@ class TM_Settings {
 
 
 	public function location_rules($post) {
-
 		$setting_location = !empty(get_post_meta( $post->ID, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $post->ID, 'tmcf_setting_location', true)) : [];
-
 		?>
 			<div class="location-rules">
 				<ul>
@@ -108,38 +105,14 @@ class TM_Settings {
 					<?php endforeach ?>
 				</ul>
 			</div>
-
 		<?php 
-// var_dump();
 	}
 
 	public function setting_fields($post) {
 		$all_fields = get_option( 'tmcf_fields' );
 
-				$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : [];
+		$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : [];
 		?>
-<style type="text/css">
-	#TMCF_settings_fields_wrap tbody tr:nth-of-type(odd) {
-	  background: #eaeaea;
-	}
-	#TMCF_settings_fields_wrap tbody tr input {
-	  background: #fff;
-	  border: 1px solid #ddd;
-	  width: 69%;
-	  padding: 9px 15px;
-	  line-height: 1em;
-	}
-	#TMCF_settings_fields_wrap tbody tr select {
-	  background-color: #fff;
-	  border: 1px solid #ddd;
-	  padding: 4px 16px;
-	  width: 50%;
-	}
-	#TMCF_settings_fields_wrap .btn-wrap {
-		text-align: right;
-		margin-top: 10px;
-	}	
-</style>
 		<div id="TMCF_settings_fields_wrap">
 			<div class="sample-fields" style="display: none;">
 				<select>
@@ -185,27 +158,6 @@ class TM_Settings {
 				<button class="add button-primary">Add Field</button>				
 			</div>
 		</div>
-		<script type="text/javascript">
-			jQuery(document).ready(function($){
-				$('#TMCF_settings_fields_wrap .add').click(function(e){
-					e.preventDefault();
-
-					let indexElement = $(this).parents('#TMCF_settings_fields_wrap').find('.fields-wrap tbody tr').length;
-					$(this).parents('#TMCF_settings_fields_wrap').find('.fields-wrap tbody').append('<tr><td><input type="text" name="tmcf_fields['+ indexElement +'][name]" value="" placeholder="Name" class="name"></td><td><input type="text" name="tmcf_fields['+ indexElement +'][key]" value="" placeholder="Key" class="key" readonly></td> <td><select name="tmcf_fields['+ indexElement +'][type]">'+ $('.sample-fields select').html() +'</select></td></tr>');
-				});
-
-				$('#TMCF_settings_fields_wrap').on('blur', '.fields-wrap .name', function(e){
-					e.preventDefault();
-					let name = $(this).val();
-					let clean_name = name.replace(/['"]/g, "");
-					$(this).val(clean_name);
-
-
-					let clean_key = clean_name.replace(/\s/g,'');
-					$(this).parents('tr').find('.key').val(clean_key.toLowerCase());
-				});
-			});
-		</script>
 		<?php 
 	}
 

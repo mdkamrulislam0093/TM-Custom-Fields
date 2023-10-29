@@ -24,6 +24,45 @@ class TM_Settings {
 
 		add_action( 'admin_print_scripts-post-new.php', [$this, 'post_enqueue']);	
 		add_action( 'admin_print_scripts-post.php', [$this, 'post_enqueue']);	
+
+		// Checking Field Key Exist
+		add_action( 'wp_ajax_checking_field_key', [$this, 'checking_field_key']);
+	}
+
+	/**
+	* 
+	* Checking Field Key Exist.
+	* return existing_key;
+	*/
+	public function checking_field_key() {
+
+		$posts = get_posts([
+			'post_type'		=> 'tmcf_settings',
+			'numberposts' 	=> -1,
+			'fields' 		=> 'ids'
+		]);
+
+		if ( empty($posts) || empty($_POST['field_key']) ) {
+			return;
+		}
+
+		$existing_key = $_POST['field_key'];
+
+		foreach ($posts as $post_id) {
+			$setting_fields = !empty(get_post_meta( $post_id, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post_id, 'tmcf_setting_fields', true), true) : [];
+			
+			if ( !empty($setting_fields) ) {
+				foreach ($setting_fields as $field) {
+					if ( $field['key'] == $_POST['field_key'] ) {
+						$existing_key = $_POST['field_key'] . '_copy';
+					}
+				}
+			}
+		}
+
+		echo $existing_key;
+
+		wp_die();
 	}
 
 	public function post_enqueue() {
@@ -31,6 +70,9 @@ class TM_Settings {
 		if ( !empty(get_current_screen()) && get_current_screen()->post_type == 'tmcf_settings' ) {
 			wp_enqueue_style( 'tm_settings_style', TMG_URL . 'assets/settings/css/style.css');
 			wp_enqueue_script( 'tm_settings_script', TMG_URL . 'assets/settings/js/settings.js', [ 'jquery' ], '1.0', true );
+			wp_localize_script( 'tm_settings_script', 'tm_settings_object', [
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			]);
 		}
 
 	}
@@ -137,7 +179,12 @@ class TM_Settings {
 						?>
 							<tr class="<?= strtolower($item['type']); ?>">
 								<td><input type="text" name="tmcf_fields[<?= $key; ?>][name]" value="<?= $item['name']; ?>" placeholder="Name" class="name"></td>
-								<td><input type="text" name="tmcf_fields[<?= $key; ?>][key]" value="<?= $item['key']; ?>" placeholder="Key" class="key" readonly></td>
+								<td>
+									<span class="key-wrap">
+										<input type="text" name="tmcf_fields[<?= $key; ?>][key]" value="<?= $item['key']; ?>" placeholder="Key" class="key">
+										<img src="<?= TMG_URL . 'assets/images/copy-icon.png'; ?>" />
+									</span>
+									<p class="error">Key is already exist.</p></td>
 								<td>
 									<select name="tmcf_fields[<?= $key; ?>][type]">
 										<?php foreach ($this->fields_type() as $field_key => $field): ?>

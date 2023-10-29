@@ -51,7 +51,6 @@ class TMCF_Fields {
 		foreach ($this->get_settings_data() as $post_id) {
 			$location = !empty(get_post_meta( $post_id, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $post_id, 'tmcf_setting_location', true)) : [];
 			$fields = !empty(get_post_meta( $post_id, 'tmcf_setting_fields', true)) ? json_decode(get_post_meta( $post_id, 'tmcf_setting_fields', true), true) : [];
-			error_log(print_r($_GET['post'], true));
 
 			if ( !empty( $location ) && !empty( $fields) ) {
 				$meta_id = sprintf('tmcf_%s', $post_id);
@@ -71,7 +70,8 @@ class TMCF_Fields {
 
 	public function display_fields($post, $args) { 
 		wp_nonce_field( basename(__FILE__), 'tmsf_nonce' );
-		$result = empty(get_post_meta( $post->ID, 'tmsf', true )) ? [] : json_decode(get_post_meta( $post->ID, 'tmsf', true ), true);
+
+		$result = empty(get_post_meta( $post->ID, $args['id'], true )) ? [] : json_decode(get_post_meta( $post->ID, $args['id'], true ), true);
 
 	 	if ( !empty($args['args']) ): ?>
 			<div class="tmcf_field_wrapper">
@@ -141,7 +141,7 @@ class TMCF_Fields {
 		$is_valid_nonce = ( isset( $_POST[ 'tmsf_nonce' ] ) && wp_verify_nonce( $_POST[ 'tmsf_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
 		
 		if ( $is_autosave || $is_revision || !$is_valid_nonce ) {
-				return;
+			return;
 		}
 
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
@@ -157,7 +157,7 @@ class TMCF_Fields {
 				$meta_id = sprintf('tmcf_%s', $settings_id);
 
 				if ( isset($_POST[$meta_id]) && !empty($_POST[$meta_id]) ) {
-					update_post_meta( $post_id, 'tmsf', json_encode($_POST[$meta_id]));
+					update_post_meta( $post_id, $meta_id, json_encode($_POST[$meta_id]));
 				}
 			}
 

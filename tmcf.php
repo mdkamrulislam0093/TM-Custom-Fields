@@ -43,17 +43,31 @@ class TMCF {
 
 	public function __construct(){
 		add_action( 'plugins_loaded', [$this, 'load_textdomain'] );
-		add_shortcode( 'tmsf', [$this, 'frontend_display'] );
+		add_shortcode( 'tmcf', [$this, 'frontend_display'] );
 	}
 
 	public function frontend_display($atts) {
 		$atts = shortcode_atts( array(
 			'id' => get_the_ID(),
-		), $atts, 'tmsf' );
+			'key' => ''
+		), $atts, 'tmcf' );
 
-		if ( isset($atts['name']) && !empty($atts['name']) ) {
-			
+		if ( !isset($atts['key']) && empty($atts['key']) ) {
+			return;
 		}
+
+		if ( !isset($atts['id']) && empty($atts['id']) ) {
+			return;
+		}
+
+		$data = empty(get_post_meta( $atts['id'], 'display_tmcf', true )) ? [] : json_decode(get_post_meta( $atts['id'], 'display_tmcf', true ), true);		
+
+		if ( !empty( $data[$atts['key']] ) ) {
+			return $data[$atts['key']];
+		}
+
+		return;
+
 	}
 
 	function load_textdomain() {

@@ -28,7 +28,7 @@
   display: none;
   color: red;
 }
-#TMCF_settings_fields_wrap .key-wrap img {
+#TMCF_settings_fields_wrap .key-wrap .dashicons {
   width: 15px;
   position: absolute;
   right: 0;
@@ -36,12 +36,14 @@
   bottom: 0;
   padding: 12px 13px;
   cursor: pointer;
+  color: #ce0101;
 }
 #TMCF_settings_fields_wrap .key-wrap {
   position: relative;
   display: inline-block;
   width: 75%;
 }
+
 #TMCF_settings_fields_wrap .key-wrap input {
   width: 100%;
 }

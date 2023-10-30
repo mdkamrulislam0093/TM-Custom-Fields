@@ -17,7 +17,7 @@
 
 			if ( images.length > 0 ) {
 				jQuery.map(images, function(item, index){
-					jQuery('.master_box .img_box_container').append('<div class="gallery_single_row"><div class="gallery_area image_container"><input class="meta_image_id" value="'+ item.id +'" type="hidden" name="'+ current_field +'[]" /><img class="gallery_img_url" src="'+item.changed.url+'" height="55" width="55"/></div><span class="button remove" title="Remove"><svg width="16" height="16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/></svg></span><div class="clear"></div></div>');
+					jQuery('.master_box .img_box_container').append('<div class="gallery_single_row"><div class="gallery_area image_container"><input class="meta_image_id" value="'+ item.id +'" type="hidden" name="'+ current_field +'[]" /><img class="gallery_img_url" src="'+item.changed.url+'" height="55" width="55"/></div><span class="button remove" title="Remove"><span class="dashicons dashicons-trash"></span></span><div class="clear"></div></div>');
 						jQuery('.master_box').show();	
 				});					
 			}
@@ -44,4 +44,26 @@
 	});
 
 	$('.img_box_container').sortable();
+
+
+
+
+	$('.tmcf_field_wrapper').on('click', '.copy-key-wrap', function(e){
+		e.preventDefault();
+		var $this = $(this);
+		var currentVal = $(this).find('.copy-key').text();
+		var copy_input = $('<input>');
+		$('body').append(copy_input);
+		copy_input.val(currentVal).select();
+		document.execCommand("copy");
+		copy_input.remove();
+		
+		$(this).find('.dashicons-admin-page').attr('class', 'dashicons dashicons-yes');
+
+		setTimeout(function(){
+			$this.find('.dashicons-admin-page').attr('class', 'dashicons dashicons-admin-page');
+		}, 3000);
+	});
+
+
 })(jQuery)

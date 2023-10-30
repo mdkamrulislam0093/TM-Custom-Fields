@@ -61,7 +61,7 @@ class TMCF_Fields {
 					[$this, 'display_fields'],
 					$location,
 					'normal',
-					'core',
+					'high',
 					$fields
 				);
 			}
@@ -69,14 +69,15 @@ class TMCF_Fields {
 	}
 
 	public function display_fields($post, $args) { 
-		wp_nonce_field( basename(__FILE__), 'tmsf_nonce' );
+		wp_nonce_field( basename(__FILE__), 'tmcf_nonce' );
 
-		$result = empty(get_post_meta( $post->ID, $args['id'], true )) ? [] : json_decode(get_post_meta( $post->ID, $args['id'], true ), true);
+		$result = empty(get_post_meta( $post->ID, 'display_tmcf', true )) ? [] : json_decode(get_post_meta( $post->ID, 'display_tmcf', true ), true);
+
 
 	 	if ( !empty($args['args']) ): ?>
 			<div class="tmcf_field_wrapper">
 				<?php foreach ($args['args'] as $key => $field) {
-					$field_name = sprintf('%s[%s]', $args['id'], $field['key']);
+					$field_name = sprintf('%s[%s]', 'tmcf', $field['key']);
 
 					if ( in_array($field['type'], ['text', 'number', 'tel', 'email', 'color']) ) {
 						$val = empty($result[$field['key']]) ? '' : $result[$field['key']];
@@ -84,6 +85,10 @@ class TMCF_Fields {
 						<div class="tmcf_field text">
 							<label><?= $field['name']; ?></label>
 							<input type="<?= $field['type'] ?>" class="widefat" name="<?= $field_name; ?>" value="<?= $val; ?>">
+							<div class="copy-key-wrap">
+								<span class="copy-key">[tmcf key="<?= $field['key']; ?>"]</span>
+								<span class="dashicons dashicons-admin-page"></span>
+							</div>
 						</div>
 					<?php 
 					}
@@ -104,10 +109,7 @@ class TMCF_Fields {
 												<img class="gallery_img_url" src="<?= $image_url[0]; ?>" height="55" width="55"/>
 											</div>
 											<span class="button remove" title="Remove">
-												<svg width="16" height="16">
-												  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-												  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-												</svg>
+												<span class="dashicons dashicons-trash"></span>
 											</span>
 											<div class="clear"></div>
 										</div>	
@@ -120,6 +122,10 @@ class TMCF_Fields {
 								<div class="add_gallery_single_row">
 								  <input class="button add" type="button" value="+" title="Add image"/>
 								</div>
+							</div>
+							<div class="copy-key-wrap">
+								<span class="copy-key">[tmcf key="<?= $field['key']; ?>"]</span>
+								<span class="dashicons dashicons-admin-page"></span>
 							</div>
 						</div>
 					<?php }
@@ -138,7 +144,7 @@ class TMCF_Fields {
 
 		$is_autosave = wp_is_post_autosave( $post_id );
 		$is_revision = wp_is_post_revision( $post_id );
-		$is_valid_nonce = ( isset( $_POST[ 'tmsf_nonce' ] ) && wp_verify_nonce( $_POST[ 'tmsf_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
+		$is_valid_nonce = ( isset( $_POST[ 'tmcf_nonce' ] ) && wp_verify_nonce( $_POST[ 'tmcf_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
 		
 		if ( $is_autosave || $is_revision || !$is_valid_nonce ) {
 			return;
@@ -148,20 +154,23 @@ class TMCF_Fields {
 			return;
 		}
 
-		foreach ($this->get_settings_data() as $settings_id) {
+		if ( isset($_POST['tmcf']) && !empty($_POST['tmcf']) ) {
+			update_post_meta( $post_id, 'display_tmcf', json_encode($_POST['tmcf']));
+		}	
+		// foreach ($this->get_settings_data() as $settings_id) {
 
-			$fields = !empty(get_post_meta( $settings_id, 'tmcf_setting_fields', true)) ? json_decode(get_post_meta( $settings_id, 'tmcf_setting_fields', true), true) : [];
-			$location = !empty(get_post_meta( $settings_id, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $settings_id, 'tmcf_setting_location', true)) : [];
+		// 	$fields = !empty(get_post_meta( $settings_id, 'tmcf_setting_fields', true)) ? json_decode(get_post_meta( $settings_id, 'tmcf_setting_fields', true), true) : [];
+		// 	$location = !empty(get_post_meta( $settings_id, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $settings_id, 'tmcf_setting_location', true)) : [];
 
-			if ( isset($_POST['post_type']) && in_array($_POST['post_type'], $location) ) {
-				$meta_id = sprintf('tmcf_%s', $settings_id);
+		// 	if ( isset($_POST['post_type']) && in_array($_POST['post_type'], $location) ) {
+		// 		$meta_id = sprintf('tmcf_%s', $settings_id);
 
-				if ( isset($_POST[$meta_id]) && !empty($_POST[$meta_id]) ) {
-					update_post_meta( $post_id, $meta_id, json_encode($_POST[$meta_id]));
-				}
-			}
+		// 		if ( isset($_POST[$meta_id]) && !empty($_POST[$meta_id]) ) {
+		// 			update_post_meta( $post_id, $meta_id, json_encode($_POST[$meta_id]));
+		// 		}
+		// 	}
 
-		}
+		// }
 
 	}
 }

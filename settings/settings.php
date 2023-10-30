@@ -29,6 +29,7 @@ class TM_Settings {
 		add_action( 'wp_ajax_checking_field_key', [$this, 'checking_field_key']);
 	}
 
+
 	/**
 	* 
 	* Checking Field Key Exist.
@@ -39,7 +40,8 @@ class TM_Settings {
 		$posts = get_posts([
 			'post_type'		=> 'tmcf_settings',
 			'numberposts' 	=> -1,
-			'fields' 		=> 'ids'
+			'fields' 		=> 'ids',
+			'exclude'		=> !empty($_POST['post_id']) ? $_POST['post_id'] : []
 		]);
 
 		if ( empty($posts) || empty($_POST['field_key']) ) {
@@ -154,7 +156,7 @@ class TM_Settings {
 		
 		$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : [];
 		?>
-		<div id="TMCF_settings_fields_wrap">
+		<div id="TMCF_settings_fields_wrap" data-post_id="<?= $post->ID; ?>">
 			<div class="sample-fields" style="display: none;">
 				<select>
 					<?php foreach ($this->fields_type() as $field_key => $field): ?>
@@ -182,7 +184,7 @@ class TM_Settings {
 								<td>
 									<span class="key-wrap">
 										<input type="text" name="tmcf_fields[<?= $key; ?>][key]" value="<?= $item['key']; ?>" placeholder="Key" class="key">
-										<img src="<?= TMG_URL . 'assets/images/copy-icon.png'; ?>" />
+										<span class="dashicons dashicons-admin-page"></span>
 									</span>
 									<p class="error">Key is already exist.</p></td>
 								<td>

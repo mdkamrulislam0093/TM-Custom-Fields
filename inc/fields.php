@@ -73,7 +73,6 @@ class TMCF_Fields {
 
 		$result = empty(get_post_meta( $post->ID, 'display_tmcf', true )) ? [] : json_decode(get_post_meta( $post->ID, 'display_tmcf', true ), true);
 
-
 	 	if ( !empty($args['args']) ): ?>
 			<div class="tmcf_field_wrapper">
 				<?php foreach ($args['args'] as $key => $field) {
@@ -82,9 +81,35 @@ class TMCF_Fields {
 					if ( in_array($field['type'], ['text', 'number', 'tel', 'email', 'color']) ) {
 						$val = empty($result[$field['key']]) ? '' : $result[$field['key']];
 					?>
-						<div class="tmcf_field text">
+						<div class="tmcf_field <?= $field['type'] ?>">
 							<label><?= $field['name']; ?></label>
 							<input type="<?= $field['type'] ?>" class="widefat" name="<?= $field_name; ?>" value="<?= $val; ?>">
+							<div class="copy-key-wrap">
+								<span class="copy-key">[tmcf key="<?= $field['key']; ?>"]</span>
+								<span class="dashicons dashicons-admin-page"></span>
+							</div>
+						</div>
+					<?php 
+					}
+
+
+					if ( $field['type'] == 'select' ) {
+						$select_val = empty($result[$field['key']]) ? '' : $result[$field['key']];
+					?>
+						<div class="tmcf_field <?= $field['type'] ?>">
+							<label><?= $field['name']; ?></label>
+							<div>
+								<?php if ( !empty($field['option']) ): ?>
+									<select name="<?= $field_name ?>">
+										<option value="">Select</option>
+									<?php foreach ($field['option'] as $option): ?>
+										<option value="<?= $option['value']; ?>" <?= selected( $select_val, $option['value'] ); ?>><?= $option['name']; ?></option>
+									<?php endforeach ?>
+									</select>
+								<?php else: ?>
+
+								<?php endif ?>
+							</div>
 							<div class="copy-key-wrap">
 								<span class="copy-key">[tmcf key="<?= $field['key']; ?>"]</span>
 								<span class="dashicons dashicons-admin-page"></span>

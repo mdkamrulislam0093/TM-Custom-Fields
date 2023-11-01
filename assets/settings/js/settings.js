@@ -86,6 +86,7 @@ jQuery(document).ready(function($){
 					'post_id': post_id
 				}, 
 				function(response) {
+					console.log(response);
 					if ( response.length > 0 ) {
 
 						let field_wrap = $this.parents('.fields-item-wrap').siblings();
@@ -113,22 +114,25 @@ jQuery(document).ready(function($){
 
 	});
 
-	$('#TMCF_settings_fields_wrap').on('click', '.key-wrap .dashicons-admin-page', function(e){
+	$('#TMCF_settings_fields_wrap').on('click', '.field-heading .copy-key', function(e){
 		e.preventDefault();
+		
 		var $this = $(this);
-		var currentVal = $(this).siblings('input').select();
+		$(this).find('input').select();
 		document.execCommand("copy");
-		$(this).attr('class', 'dashicons dashicons-yes');
+
+		$(this).addClass('copied');
 
 		setTimeout(function(){
-			$this.attr('class', 'dashicons dashicons-admin-page');
+			$(this).removeClass('copied');
 		}, 3000);
+
 	});
 
-	$('#TMCF_settings_fields_wrap').on('click', '.field-heading', function(e){
+	$('#TMCF_settings_fields_wrap').on('click', '.field-heading .tmcf-col:not(.key-field)', function(e){
 		e.preventDefault();
-		$(this).siblings('.field-content').slideToggle();
-		$(this).parent().toggleClass('active');
+		$(this).parents('.fields-item-wrap').find('.field-content').slideToggle();
+		$(this).parents('.fields-item-wrap').toggleClass('active');
 
 	});
 

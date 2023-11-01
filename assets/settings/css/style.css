@@ -3,6 +3,7 @@
 }
 .location-rules label input {
   margin-right: 10px;
+  transform: translateY(1px);
 }
 
 .tmcf-row {
@@ -12,6 +13,12 @@
 }
 .tmcf-row > .tmcf-col {
   flex: 1 0 0%;
+}
+.tmcf-row > .tmcf-col.key-field {
+  flex: 0 0 auto;
+}
+#TMCF_settings_fields_wrap .tmcf-row > .tmcf-col.type-field {
+  text-align: center;
 }
 .tmcf-row > .tmcf-col.trash {
   flex: 0 0 auto;
@@ -26,24 +33,21 @@
 #TMCF_settings_fields_wrap .fields-wrap {
   border: 1px solid #ddd;
 }
-#TMCF_settings_fields_wrap .field-sortbar {
-  background: #fff;
-}
 #TMCF_settings_fields_wrap .field-content {
   display: none;
-}
-#TMCF_settings_fields_wrap .field-sortbar .tmcf-col {
-  padding: 8px 10px;
 }
 /*#TMCF_settings_fields_wrap .fields-item-contents .field-heading .tmcf-col {
   padding: 8px 10px;
 }*/
 #TMCF_settings_fields_wrap .fields-item-wrap {
   background: #fff;
-  padding: 15px 20px;
+/*  padding: 15px 20px;*/
   margin-bottom: 30px;
   box-shadow: 0 0 5px 2px #dddddd69;
   border-radius: 5px;
+}
+#TMCF_settings_fields_wrap .fields-item-wrap .tmcf-col {
+  padding: 15px 20px;
 }
 #TMCF_settings_fields_wrap .fields-wrap .field-heading .tmcf-row {
   cursor: pointer;
@@ -54,6 +58,49 @@
   text-transform: capitalize;
   font-weight: 500;
 }
+#TMCF_settings_fields_wrap .field-heading .copy-key::before {
+  content: '';
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 8V5.2c0-1.2.02-1.49.1-1.66 .09-.19.24-.35.43-.44 .16-.09.45-.11 1.65-.11h7.6c1.19 0 1.48.02 1.65.1 .18.09.34.24.43.43 .08.16.1.45.1 1.65v7.6c0 1.19-.03 1.48-.11 1.65 -.1.18-.25.34-.44.43 -.17.08-.46.1-1.66.1h-2.8c-.56 0-1 .44-1 1 0 .55.44 1 1 1h2.8c1.6 0 1.98-.04 2.56-.33 .56-.29 1.02-.75 1.31-1.32 .29-.59.32-.97.32-2.57v-7.6c0-1.61-.04-1.99-.33-2.57 -.29-.57-.75-1.03-1.32-1.32 -.59-.3-.97-.33-2.57-.33h-7.6c-1.61 0-1.99.03-2.57.32 -.57.28-1.03.74-1.32 1.31 -.3.58-.33.96-.33 2.56v2.8c0 .55.44 1 1 1 .55 0 1-.45 1-1ZM5.2 23h7.6c1.6 0 1.98-.04 2.56-.33 .56-.29 1.02-.75 1.31-1.32 .29-.59.32-.97.32-2.57v-7.6c0-1.61-.04-1.99-.33-2.57 -.29-.57-.75-1.03-1.32-1.32 -.59-.3-.97-.33-2.57-.33h-7.6c-1.61 0-1.99.03-2.57.32 -.57.28-1.03.74-1.32 1.31 -.3.58-.33.96-.33 2.56v7.6c0 1.6.03 1.98.32 2.56 .28.56.74 1.02 1.31 1.31 .58.29.96.32 2.56.32Zm0-2c-1.2 0-1.49-.03-1.66-.11 -.19-.1-.35-.25-.44-.44 -.09-.17-.11-.46-.11-1.66v-7.6c0-1.2.02-1.49.1-1.66 .09-.19.24-.35.43-.44 .16-.09.45-.11 1.65-.11h7.6c1.19 0 1.48.02 1.65.1 .18.09.34.24.43.43 .08.16.1.45.1 1.65v7.6c0 1.19-.03 1.48-.11 1.65 -.1.18-.25.34-.44.43 -.17.08-.46.1-1.66.1h-7.6Z'/%3E%3C/svg%3E");
+  mask-size: contain;
+  background-color: currentColor;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  font-size: 12px;
+  position: absolute;
+  height: 12px;
+  width: 12px;
+  right: 0;
+  top: 18%;
+  color: #96989a;
+}
+#TMCF_settings_fields_wrap .field-heading .copy-key.copied::before {
+  content: "\f147";
+  mask-image: none;
+  background-color: transparent;
+  font-family: dashicons;
+  font-size: 23px;
+  position: absolute;
+  top: 0;
+  height: auto;
+  width: auto;
+  line-height: 1em;
+  color: #198e1b;
+}
+#TMCF_settings_fields_wrap .field-heading .copy-key {
+  padding-right: 20px;
+  position: relative;
+  color: #96989a;
+}
+#TMCF_settings_fields_wrap .field-heading .copy-key input {
+  border: 1px solid #e2e2e2;
+  color: #96989a;
+  cursor: pointer;
+}
+
 /*#TMCF_settings_fields_wrap .field-heading .name {
   border: 1px solid #ddd;
   width: 69%;
@@ -63,6 +110,7 @@
 #TMCF_settings_fields_wrap .fields-wrap .fields-item-contents > div.active .dashicons-arrow-right-alt2::before {
   content: "\f347";
 }
+
 #TMCF_settings_fields_wrap .field-heading .key {
   background: #fff;
   border: 1px solid #ddd;

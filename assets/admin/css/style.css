@@ -113,5 +113,10 @@
 }
 
 .tmcf_field_wrapper .copy-key-wrap .dashicons-yes {
-	color: #f00;
+	color: #198e1b;
+}
+
+
+.tmcf_field_wrapper .tmcf_field.select select {
+	width: 100%;
 }

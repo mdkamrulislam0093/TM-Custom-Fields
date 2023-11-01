@@ -44,19 +44,22 @@ class TM_Settings {
 			'exclude'		=> !empty($_POST['post_id']) ? $_POST['post_id'] : []
 		]);
 
-		if ( empty($posts) || empty($_POST['field_key']) ) {
+
+		if ( empty($_POST['field_key']) ) {
 			return;
 		}
 
 		$existing_key = $_POST['field_key'];
 
-		foreach ($posts as $post_id) {
-			$setting_fields = !empty(get_post_meta( $post_id, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post_id, 'tmcf_setting_fields', true), true) : [];
-			
-			if ( !empty($setting_fields) ) {
-				foreach ($setting_fields as $field) {
-					if ( $field['key'] == $_POST['field_key'] ) {
-						$existing_key = $_POST['field_key'] . '_copy';
+		if ( !empty($posts) ) {
+			foreach ($posts as $post_id) {
+				$setting_fields = !empty(get_post_meta( $post_id, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post_id, 'tmcf_setting_fields', true), true) : [];
+				
+				if ( !empty($setting_fields) ) {
+					foreach ($setting_fields as $field) {
+						if ( $field['key'] == $_POST['field_key'] ) {
+							$existing_key = $_POST['field_key'] . '_copy';
+						}
 					}
 				}
 			}
@@ -176,14 +179,6 @@ class TM_Settings {
 		?>
 		<div id="TMCF_settings_fields_wrap" data-post_id="<?= $post->ID; ?>">
 			<div class="fields-wrap">
-				<div class="field-sortbar">
-					<div class="tmcf-row">
-						<div class="tmcf-col">Label</div>
-						<div class="tmcf-col">Key</div>
-						<div class="tmcf-col">Type</div>
-						<div class="tmcf-col trash"></div>
-					</div>
-				</div>
 				<div class="fields-item-contents">
 						<?php 
 							if ( !empty($setting_fields) ) {
@@ -195,10 +190,12 @@ class TM_Settings {
 								<div class="tmcf-col">
 									<span class="name"><?= $item['name']; ?></span>
 								</div>
-								<div class="tmcf-col">
-									<span class="copy-key">[tmcf key="<?= $item['key']; ?>"]</span>
+								<div class="tmcf-col key-field">
+									<span class="copy-key">
+										<input type="text" value='[tmcf key="<?= $item['key']; ?>"]' readonly>
+									</span>
 								</div>
-								<div class="tmcf-col">
+								<div class="tmcf-col type-field">
 									<span class="type"><?= $item['type']; ?></span>
 								</div>
 								<div class="tmcf-col trash">

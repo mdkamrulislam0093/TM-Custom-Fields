@@ -1,12 +1,29 @@
 jQuery(document).ready(function($){
 	$('#TMCF_settings_fields_wrap .add').click(function(e){
 		e.preventDefault();
+		let clone_wrap = $(this).parents('#TMCF_settings_fields_wrap').find('.fields-item-wrap:last-child').clone();
+		let indexElement = clone_wrap.data('index') + 1;
 
-		let indexElement = $(this).parents('#TMCF_settings_fields_wrap').find('.fields-wrap tbody tr').length;
-		$(this).parents('#TMCF_settings_fields_wrap').find('.fields-wrap tbody').append('<tr><td><input type="text" name="tmcf_fields['+ indexElement +'][name]" value="" placeholder="Name" class="name"></td><td><span class="key-wrap"><input type="text" name="tmcf_fields['+ indexElement +'][key]" value="" placeholder="Key" class="key"><span class="dashicons dashicons-admin-page"></span></span><p class="error">Key is already exist.</p></td> <td><select name="tmcf_fields['+ indexElement +'][type]">'+ $('.sample-fields select').html() +'</select></td></tr>');
+		clone_wrap.find('.field-label input').attr('name', 'tmcf_fields['+ indexElement +'][name]').val('');
+		clone_wrap.find('.field-key input').attr('name', 'tmcf_fields['+ indexElement +'][key]').val('');
+		clone_wrap.find('.field-type select').attr('name', 'tmcf_fields['+ indexElement +'][type]').val('');
+		clone_wrap.find('.field-option tbody tr:gt(0)').remove();
+
+		clone_wrap.find('.field-option tbody tr:first-child input[data-name="name"]').attr('name', 'tmcf_fields['+ indexElement +'][option][0][name]').val('');
+		clone_wrap.find('.field-option tbody tr:first-child input[data-name="value"]').attr('name', 'tmcf_fields['+ indexElement +'][option][0][value]').val('');
+		clone_wrap.attr('data-index', indexElement);
+
+		clone_wrap.find('.field-heading .name').text('Label');
+		clone_wrap.find('.field-heading .copy-key').text('Key');
+		clone_wrap.find('.field-heading .type').text('Type');
+
+		clone_wrap.appendTo($(this).parents('#TMCF_settings_fields_wrap').find('.fields-item-contents'));
+		clone_wrap.find('.field-content').slideDown();
 	});
 
-	$('#TMCF_settings_fields_wrap').on('blur', '.fields-wrap .name', function(e){
+
+
+	$('#TMCF_settings_fields_wrap').on('blur', '.field-label .name', function(e){
 		e.preventDefault();
 
 		$('#TMCF_settings_fields_wrap error').hide();
@@ -15,6 +32,7 @@ jQuery(document).ready(function($){
 		let name = $(this).val();
 		let field_name = name.replace(/['"]/g, "");
 		$(this).val(field_name);
+		$(this).parents('.fields-item-wrap').find('.field-heading .name').text(field_name);
 
 		let field_key = field_name.replace(/\s/g,'_').toLowerCase();
 		let post_id = $(this).parents('#TMCF_settings_fields_wrap').data('post_id');
@@ -27,11 +45,10 @@ jQuery(document).ready(function($){
 				'post_id': post_id
 			}, 
 			function(response) {
-
 				if ( response.length > 0 ) {
 					var return_response = response;
 
-					let field_wrap = $this.parents('tr').siblings();
+					let field_wrap = $this.parents('.fields-item-wrap').siblings();
 
 					if ( field_wrap.length > 0 ) {
 						jQuery.map(field_wrap, function(item, index){
@@ -41,9 +58,11 @@ jQuery(document).ready(function($){
 						});			
 					}
 
-					$this.parents('tr').find('.key').val(response);
+					$this.parents('.fields-item-wrap').find('.key').val(response);
+					$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ response +'"]');
 				} else {
-					$this.parents('tr').find('.key').val(field_key);				
+					$this.parents('.fields-item-wrap').find('.key').val(field_key);				
+					$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ field_key +'"]');
 				}
 			}
 		);
@@ -54,7 +73,6 @@ jQuery(document).ready(function($){
 		$('#TMCF_settings_fields_wrap error').hide();
 		
 		var $this = $(this);
-
 		let field_key = $(this).val();
 
 		if ( field_key.length > 0 ) {			
@@ -70,7 +88,7 @@ jQuery(document).ready(function($){
 				function(response) {
 					if ( response.length > 0 ) {
 
-						let field_wrap = $this.parents('tr').siblings();
+						let field_wrap = $this.parents('.fields-item-wrap').siblings();
 
 						if ( field_wrap.length > 0 ) {
 							jQuery.map(field_wrap, function(item, index){
@@ -81,10 +99,12 @@ jQuery(document).ready(function($){
 						}
 
 						$this.val(response);
-						$this.parents('.key-wrap').siblings('.error').show();
+						$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ response +'"]');
+						$this.siblings('.error').show();
 
 					} else {
-						$this.val(field_key);					
+						$this.val(field_key);
+						$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ field_key +'"]');					
 					}
 				}
 			);
@@ -103,6 +123,54 @@ jQuery(document).ready(function($){
 		setTimeout(function(){
 			$this.attr('class', 'dashicons dashicons-admin-page');
 		}, 3000);
+	});
+
+	$('#TMCF_settings_fields_wrap').on('click', '.field-heading', function(e){
+		e.preventDefault();
+		$(this).siblings('.field-content').slideToggle();
+		$(this).parent().toggleClass('active');
+
+	});
+
+	$('#TMCF_settings_fields_wrap').on('click', '.field-option .add_option', function(e){
+		e.preventDefault();
+		var clone_wrap = $(this).parents('table').find('tbody tr:last-child');
+
+		if ( clone_wrap.length > 0 ) {
+			clone_option = clone_wrap.clone();
+			var current_key = $(this).parents('table').find('tbody tr').length;
+			var current_index = $(this).parents('.fields-item-wrap').data('index');
+			
+			jQuery.map(clone_option.find('input'), function(item, index){
+				var name = $(item).data('name');
+				$(item).attr('name', 'tmcf_fields['+ current_index +'][option]['+ current_key +']['+ name +']' );
+			});
+
+			clone_option.appendTo($(this).parents('table').find('tbody'))
+			$(this).parents('table').find('tbody tr:last-child .remove-option').html('<span class="dashicons dashicons-trash"></span>');
+		}
+	});
+
+	$('#TMCF_settings_fields_wrap').on('click', '.field-control-option .dashicons-trash', function(e){
+		e.preventDefault();
+		$(this).parents('tr').remove();
+	});
+	 
+	$('#TMCF_settings_fields_wrap').on('click', '.field-heading .tmcf-col.trash', function(e){
+		e.preventDefault();
+
+		$(this).parents('.fields-item-wrap').remove();
+	});
+
+	$('#TMCF_settings_fields_wrap').on('change', '.field-type select', function(e){
+		e.preventDefault();
+		$(this).parents('.fields-item-wrap').find('.field-heading .type').text($(this).val());
+
+		if ( $(this).val() == 'select' || $(this).val() == 'checkbox' || $(this).val() == 'radio' ) {
+			$(this).parents('.field-content').find('.field-option').slideDown();
+		} else {
+			$(this).parents('.field-content').find('.field-option').slideUp();			
+		}
 	});
 
 });

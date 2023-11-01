@@ -67,7 +67,6 @@ class TMCF {
 		}
 
 		return;
-
 	}
 
 	function load_textdomain() {

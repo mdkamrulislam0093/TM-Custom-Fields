@@ -120,7 +120,9 @@ class TM_Settings {
 			'number' => 'Number',
 			'tel' => 'Tel',
 			'email' => 'Email',
-			// 'select' => 'Select',
+			'select' => 'Select',
+			'checkbox' => 'Checkbox',
+			'radio' => 'Radio',
 			'gallery' => 'Gallery',
 			'color' => 'Color',
 		];
@@ -135,7 +137,23 @@ class TM_Settings {
 		return array_diff( $all_post_types, [ 'attachment' ] );		
 	}
 
+	public function set_default_data() {
+		$default = [
+			[ 
+				'name' => 'name', 
+				'key' => 'key', 
+				'type' => 'type',
+				'option' => [
+					[
+						'name' => '',
+						'value' => ''
+					]
+				]
+			]
+		];
 
+		return $default;
+	}
 
 	public function location_rules($post) {
 		$setting_location = !empty(get_post_meta( $post->ID, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $post->ID, 'tmcf_setting_location', true)) : [];
@@ -153,55 +171,132 @@ class TM_Settings {
 	}
 
 	public function setting_fields($post) {
-		
-		$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : [];
+
+		$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : $this->set_default_data();
 		?>
 		<div id="TMCF_settings_fields_wrap" data-post_id="<?= $post->ID; ?>">
-			<div class="sample-fields" style="display: none;">
-				<select>
-					<?php foreach ($this->fields_type() as $field_key => $field): ?>
-						<option value="<?= $field_key ?>"><?= $field; ?></option>						
-					<?php endforeach ?>
-				</select>
-			</div>
-
 			<div class="fields-wrap">
-				<table class="widefat">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Key</th>
-							<th>Type</th>
-						</tr>
-					</thead>
-					<tbody>
+				<div class="field-sortbar">
+					<div class="tmcf-row">
+						<div class="tmcf-col">Label</div>
+						<div class="tmcf-col">Key</div>
+						<div class="tmcf-col">Type</div>
+						<div class="tmcf-col trash"></div>
+					</div>
+				</div>
+				<div class="fields-item-contents">
 						<?php 
 							if ( !empty($setting_fields) ) {
 								foreach ($setting_fields as $key => $item) {
-						?>
-							<tr class="<?= strtolower($item['type']); ?>">
-								<td><input type="text" name="tmcf_fields[<?= $key; ?>][name]" value="<?= $item['name']; ?>" placeholder="Name" class="name"></td>
-								<td>
-									<span class="key-wrap">
-										<input type="text" name="tmcf_fields[<?= $key; ?>][key]" value="<?= $item['key']; ?>" placeholder="Key" class="key">
-										<span class="dashicons dashicons-admin-page"></span>
-									</span>
-									<p class="error">Key is already exist.</p></td>
-								<td>
+						?>					
+					<div class="fields-item-wrap <?= $item['type']; ?>" data-index="<?= $key; ?>">
+						<div class="field-heading">
+							<div class="tmcf-row">
+								<div class="tmcf-col">
+									<span class="name"><?= $item['name']; ?></span>
+								</div>
+								<div class="tmcf-col">
+									<span class="copy-key">[tmcf key="<?= $item['key']; ?>"]</span>
+								</div>
+								<div class="tmcf-col">
+									<span class="type"><?= $item['type']; ?></span>
+								</div>
+								<div class="tmcf-col trash">
+									<span class="dashicons dashicons-trash"></span>
+									<span class="dashicons dashicons-arrow-right-alt2"></span>
+								</div>
+							</div>
+						</div>
+						<div class="field-content">
+							<div class="field-component field-label">
+								<div class="field-meta">
+									<label>Label</label>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>							
+								</div>
+								<div class="field-control">
+									<input type="text" name="tmcf_fields[<?= $key; ?>][name]" value="<?= $item['name']; ?>" placeholder="Name" class="name">
+								</div>
+							</div>
+							<div class="field-component field-key">
+								<div class="field-meta">
+									<label>Name/Key</label>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>							
+								</div>
+								<div class="field-control">
+									<input type="text" class="key" name="tmcf_fields[<?= $key; ?>][key]" value="<?= $item['key']; ?>" placeholder="Key">
+									<p class="error">Key is already exist.</p>									
+								</div>
+							</div>	
+
+							<div class="field-component field-type">
+								<div class="field-meta">
+									<label>Field Type</label>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>							
+								</div>
+								<div class="field-control">
 									<select name="tmcf_fields[<?= $key; ?>][type]">
 										<?php foreach ($this->fields_type() as $field_key => $field): ?>
 											<option value="<?= $field_key ?>" <?= selected( $item['type'], $field_key ); ?>><?= $field; ?></option>						
 										<?php endforeach ?>
 									</select>
-								</td>
-							</tr>
-						<?php 
-								}
-							}
-						?>						
-					</tbody>
-				</table>
+								</div>
+							</div>
+
+							<div class="field-component field-option" data-type="<?= $item['type']; ?>">
+								<div class="field-meta">
+									<label>Field Options</label>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>							
+								</div>
+								<div class="field-control">
+									<div class="field-control-option">
+										<table>
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Value</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php if ( !empty($item['option']) ): ?>
+													<?php foreach ($item['option'] as $option_key => $option): ?>
+													<tr>
+														<td><input type="text" data-name="name" name="tmcf_fields[<?= $key; ?>][option][<?= $option_key; ?>][name]" placeholder="Option Name" value="<?= $option['name']; ?>" ></td>
+														<td><input type="text" data-name="value" name="tmcf_fields[<?= $key; ?>][option][<?= $option_key; ?>][value]" placeholder="Option Value" value="<?= $option['value']; ?>"></td>
+														<td class="remove-option">
+															<?php 
+																if ( $option_key > 0 ) {
+																	echo '<span class="dashicons dashicons-trash"></span>';
+																}
+															 ?>
+														</td>
+													</tr>	
+												<?php endforeach ?>
+												<?php else: ?>
+													<tr>
+														<td><input type="text" data-name="name" name="tmcf_fields[<?= $key; ?>][option][<?= $option_key; ?>][name]" placeholder="Option Name" value="<?= $option['name']; ?>" ></td>
+														<td><input type="text" data-name="value" name="tmcf_fields[<?= $key; ?>][option][0][value]" placeholder="Option Value" value="<?= $option['value']; ?>"></td>
+														<td class="remove-option"></td>
+													</tr>		
+												<?php endif ?>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td><button class="button-primary add_option">New Field Option</button></td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</div>								
+							</div>
+						</div>						
+					</div>
+					<?php 
+						}
+					}
+					 ?>
+				</div>
 			</div>
+
 			<div class="btn-wrap">
 				<button class="add button-primary">Add Field</button>				
 			</div>
@@ -233,6 +328,8 @@ class TM_Settings {
 		if ( isset($_POST['location']) ) {
 			update_post_meta( $post_id, 'tmcf_setting_location', implode(',', $_POST['location']));
 		}
+
+		error_log(print_r($_POST['tmcf_fields'], true));
 
 		if ( isset($_POST['tmcf_fields']) ) {
 			update_post_meta( $post_id, 'tmcf_setting_fields', json_encode($_POST['tmcf_fields']));

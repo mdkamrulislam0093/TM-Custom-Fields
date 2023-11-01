@@ -4,21 +4,85 @@
 .location-rules label input {
   margin-right: 10px;
 }
-#TMCF_settings_fields_wrap tbody tr:nth-of-type(odd) {
-  background: #eaeaea;
+
+.tmcf-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
-#TMCF_settings_fields_wrap tbody tr input {
+.tmcf-row > .tmcf-col {
+  flex: 1 0 0%;
+}
+.tmcf-row > .tmcf-col.trash {
+  flex: 0 0 auto;
+  width: 8%;
+  display: flex;
+  justify-content: space-around;
+}
+#TMCF_settings_fields_wrap .fields-item-contents {
+  background: whitesmoke;
+  padding: 30px;
+}
+#TMCF_settings_fields_wrap .fields-wrap {
+  border: 1px solid #ddd;
+}
+#TMCF_settings_fields_wrap .field-sortbar {
   background: #fff;
+}
+#TMCF_settings_fields_wrap .field-content {
+  display: none;
+}
+#TMCF_settings_fields_wrap .field-sortbar .tmcf-col {
+  padding: 8px 10px;
+}
+/*#TMCF_settings_fields_wrap .fields-item-contents .field-heading .tmcf-col {
+  padding: 8px 10px;
+}*/
+#TMCF_settings_fields_wrap .fields-item-wrap {
+  background: #fff;
+  padding: 15px 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 5px 2px #dddddd69;
+  border-radius: 5px;
+}
+#TMCF_settings_fields_wrap .fields-wrap .field-heading .tmcf-row {
+  cursor: pointer;
+}
+#TMCF_settings_fields_wrap .fields-item-wrap .field-heading .name {
+  color: #007cba;
+  font-size: 14px;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+/*#TMCF_settings_fields_wrap .field-heading .name {
   border: 1px solid #ddd;
   width: 69%;
   padding: 9px 15px;
   line-height: 1em;
+}*/
+#TMCF_settings_fields_wrap .fields-wrap .fields-item-contents > div.active .dashicons-arrow-right-alt2::before {
+  content: "\f347";
 }
-#TMCF_settings_fields_wrap tbody tr select {
+#TMCF_settings_fields_wrap .field-heading .key {
+  background: #fff;
+  border: 1px solid #ddd;
+  width: 100%;
+  padding: 9px 15px;
+  line-height: 1em;
+}
+#TMCF_settings_fields_wrap .field-heading select {
   background-color: #fff;
   border: 1px solid #ddd;
   padding: 4px 16px;
   width: 50%;
+}
+.field-component.field-option {
+  display: none;
+}
+.field-component.field-option[data-type="select"], 
+.field-component.field-option[data-type="checkbox"], 
+.field-component.field-option[data-type="radio"] {
+  display: block;
 }
 #TMCF_settings_fields_wrap .btn-wrap {
   text-align: right;
@@ -27,6 +91,7 @@
 #TMCF_settings_fields_wrap .error {
   display: none;
   color: red;
+  margin: 3px 0;
 }
 #TMCF_settings_fields_wrap .key-wrap .dashicons {
   width: 15px;
@@ -45,5 +110,65 @@
 }
 
 #TMCF_settings_fields_wrap .key-wrap input {
+  width: 100%;
+}
+
+#TMCF_settings_fields_wrap .field-component.field-option > div {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+#TMCF_settings_fields_wrap .field-component.field-option table {
+  width: 40%;
+}
+#TMCF_settings_fields_wrap .field-component.field-option table tr td {
+  padding-bottom: 7px;
+}
+
+
+
+/*******************************/
+
+.field-component {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+  align-items: center;
+  justify-content: space-between;
+}
+.field-component > div {
+  max-width: 49%;
+  flex: 0 0 49%;
+}
+.field-component label {
+  display: block;
+  font-size: 15px;
+  line-height: 20px;
+  color: #23282D;
+  font-weight: 700;
+}
+.field-component p {
+  margin: 0;
+}
+.field-component .field-meta p {
+  font-size: 13px;
+  line-height: 17px;
+  color: #7B7E81;
+  padding: 0 0 4px;
+}
+.field-component .field-control input,
+.field-component .field-control select {
+  font-size: 13px;
+  line-height: 20px;
+  border-radius: 4px;
+  background-color: #f4f4f5;
+  border: none;
+  color: #7B7E81;
+  padding: 6px 12px;
+  box-shadow: none;
+  outline: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0;
   width: 100%;
 }

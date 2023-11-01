@@ -326,8 +326,6 @@ class TM_Settings {
 			update_post_meta( $post_id, 'tmcf_setting_location', implode(',', $_POST['location']));
 		}
 
-		error_log(print_r($_POST['tmcf_fields'], true));
-
 		if ( isset($_POST['tmcf_fields']) ) {
 			update_post_meta( $post_id, 'tmcf_setting_fields', json_encode($_POST['tmcf_fields']));
 		}

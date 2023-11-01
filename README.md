@@ -1,4 +1,4 @@
-=== WPSC Ultimate Testimonials === 
+=== TM Custom Fields === 
 
 Contributors: kamrulislam0093
 Tags: Wordpress custom fields, advanced custom fields, ultimate custom fields, Easy Custom Fields, wordpress gallery field, color field 

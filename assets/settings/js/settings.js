@@ -160,7 +160,7 @@ jQuery(document).ready(function($){
 		$(this).parents('tr').remove();
 	});
 	 
-	$('#TMCF_settings_fields_wrap').on('click', '.field-heading .tmcf-col.trash', function(e){
+	$('#TMCF_settings_fields_wrap').on('click', '.field-heading .tmcf-col.dashicons-trash', function(e){
 		e.preventDefault();
 
 		$(this).parents('.fields-item-wrap').remove();

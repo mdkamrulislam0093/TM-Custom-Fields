@@ -232,6 +232,7 @@ class TM_Settings {
 								</div>
 								<div class="field-control">
 									<select name="tmcf_fields[<?= $key; ?>][type]">
+										<option value="">Select Field Type</option>
 										<?php foreach ($this->fields_type() as $field_key => $field): ?>
 											<option value="<?= $field_key ?>" <?= selected( $item['type'], $field_key ); ?>><?= $field; ?></option>						
 										<?php endforeach ?>

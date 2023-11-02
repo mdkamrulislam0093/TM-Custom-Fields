@@ -172,8 +172,10 @@ jQuery(document).ready(function($){
 
 		if ( $(this).val() == 'select' || $(this).val() == 'checkbox' || $(this).val() == 'radio' ) {
 			$(this).parents('.field-content').find('.field-option').slideDown();
+			$(this).parents('.field-content').find('.field-placeholder').removeClass('active');
 		} else {
-			$(this).parents('.field-content').find('.field-option').slideUp();			
+			$(this).parents('.field-content').find('.field-option').slideUp();
+			$(this).parents('.field-content').find('.field-placeholder').addClass('active');
 		}
 	});
 

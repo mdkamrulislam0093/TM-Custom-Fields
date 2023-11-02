@@ -77,6 +77,7 @@ class TMCF_Fields {
 			<div class="tmcf_field_wrapper">
 				<?php foreach ($args['args'] as $key => $field) {
 					$field_name = sprintf('%s[%s]', 'tmcf', $field['key']);
+					$placeholder = empty($field['placeholder']) ? '' : $field['placeholder'];					
 					$copy_desc = sprintf('<div class="copy-key-wrap"><span class="copy-key">[tmcf key="%s" id="%s"]</span><span class="dashicons dashicons-admin-page"></span></div>', $field['key'], $post->ID);
 
 					/**
@@ -90,7 +91,7 @@ class TMCF_Fields {
 					?>
 						<div class="tmcf_field <?= $field['type'] ?>">
 							<label><?= $field['name']; ?></label>
-							<input type="<?= $field['type'] ?>" class="widefat" name="<?= $field_name; ?>" value="<?= $val; ?>">
+							<input type="<?= $field['type'] ?>" class="widefat" name="<?= $field_name; ?>" value="<?= $val; ?>" placeholder="<?= $placeholder; ?>">
 							<?= $copy_desc; ?>
 						</div>
 					<?php 

@@ -217,7 +217,7 @@ class TM_Settings {
 							<div class="field-component field-key">
 								<div class="field-meta">
 									<label>Name/Key</label>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>							
+									<p>Name/Key field will be stored in the database and will help to display on your website. Should contain only Latin letters, numbers, '-' or '_' chars.</p>							
 								</div>
 								<div class="field-control">
 									<input type="text" class="key" name="tmcf_fields[<?= $key; ?>][key]" value="<?= $item['key']; ?>" placeholder="Key">
@@ -228,7 +228,7 @@ class TM_Settings {
 							<div class="field-component field-type">
 								<div class="field-meta">
 									<label>Field Type</label>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>							
+									<p>Field type defines the way field to be displayed on Post edit page.</p>							
 								</div>
 								<div class="field-control">
 									<select name="tmcf_fields[<?= $key; ?>][type]">
@@ -243,7 +243,7 @@ class TM_Settings {
 							<div class="field-component field-option" data-type="<?= $item['type']; ?>">
 								<div class="field-meta">
 									<label>Field Options</label>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>							
+									<p>Field Options will be show in field type option.</p>							
 								</div>
 								<div class="field-control">
 									<div class="field-control-option">
@@ -286,6 +286,16 @@ class TM_Settings {
 									</div>
 								</div>								
 							</div>
+
+							<div class="field-component field-placeholder <?= in_array($item['type'], ['text', 'number', 'tel', 'email' ]) ? 'active' : ''; ?>">
+								<div class="field-meta">
+									<label>Placeholder</label>
+									<p>Pleaseholder text</p>							
+								</div>
+								<div class="field-control">
+									<input type="text" class="placeholder" name="tmcf_fields[<?= $key; ?>][placeholder]" value="<?= $item['placeholder']; ?>" placeholder="Placeholder">								
+								</div>
+							</div>								
 						</div>						
 					</div>
 					<?php 

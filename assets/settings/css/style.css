@@ -124,9 +124,14 @@
   padding: 4px 16px;
   width: 50%;
 }
-.field-component.field-option {
+.field-component.field-option,
+.field-component.field-placeholder {
   display: none;
 }
+.field-component.field-placeholder.active {
+  display: flex;
+}
+
 .field-component.field-option[data-type="select"], 
 .field-component.field-option[data-type="checkbox"], 
 .field-component.field-option[data-type="radio"] {

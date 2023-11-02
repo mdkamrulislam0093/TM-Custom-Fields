@@ -78,6 +78,13 @@ class TMCF_Fields {
 				<?php foreach ($args['args'] as $key => $field) {
 					$field_name = sprintf('%s[%s]', 'tmcf', $field['key']);
 
+
+					/**
+					* 
+					* Text, Number, Tel, Email, Color Field Layout
+					* 
+					**/
+
 					if ( in_array($field['type'], ['text', 'number', 'tel', 'email', 'color']) ) {
 						$val = empty($result[$field['key']]) ? '' : $result[$field['key']];
 					?>
@@ -92,6 +99,12 @@ class TMCF_Fields {
 					<?php 
 					}
 
+
+					/**
+					* 
+					* Select Field Layout
+					* 
+					**/
 
 					if ( $field['type'] == 'select' ) {
 						$select_val = empty($result[$field['key']]) ? '' : $result[$field['key']];
@@ -117,6 +130,79 @@ class TMCF_Fields {
 						</div>
 					<?php 
 					}
+
+
+					/**
+					* 
+					* Radio Field Layout
+					* 
+					**/
+
+					if ( $field['type'] == 'radio' ) {
+						$radio_val = empty($result[$field['key']]) ? '' : $result[$field['key']];
+					?>
+						<div class="tmcf_field <?= $field['type'] ?>">
+							<label><?= $field['name']; ?></label>
+							<ul class="radio_val">
+								<?php if ( !empty($field['option']) ): 
+									foreach ($field['option'] as $radio) { ?>
+										<li>
+											<label>
+												<input type="radio" name="<?= $field_name ?>" value="<?= $radio['value']; ?>" <?= checked( $radio_val, $radio['value'] ); ?>>
+												<?= $radio['name']; ?>
+											</label>
+										</li>
+									<?php }
+									?>
+								<?php endif ?>
+							</ul>
+							<div class="copy-key-wrap">
+								<span class="copy-key">[tmcf key="<?= $field['key']; ?>"]</span>
+								<span class="dashicons dashicons-admin-page"></span>
+							</div>
+						</div>
+					<?php 
+					}
+
+
+					/**
+					* 
+					* Checkbox Field Layout
+					* 
+					**/
+
+					if ( $field['type'] == 'checkbox' ) {
+						$checkbox_val = empty($result[$field['key']]) ? [] : $result[$field['key']];
+					?>
+						<div class="tmcf_field <?= $field['type'] ?>">
+							<label><?= $field['name']; ?></label>
+							<ul class="checkbox_val">
+								<?php if ( !empty($field['option']) ): 
+									foreach ($field['option'] as $checkbox) { ?>
+										<li>
+											<label>
+												<input type="checkbox" name="<?= $field_name ?>[]" value="<?= $checkbox['value']; ?>" <?= checked( in_array($checkbox['value'], $checkbox_val), 1 ); ?>>
+												<?= $checkbox['name']; ?>
+											</label>
+										</li>
+									<?php }
+									?>
+								<?php endif ?>
+							</ul>
+							<div class="copy-key-wrap">
+								<span class="copy-key">[tmcf key="<?= $field['key']; ?>"]</span>
+								<span class="dashicons dashicons-admin-page"></span>
+							</div>
+						</div>
+					<?php 
+					}
+
+
+					/**
+					* 
+					* Gallery Field Layout
+					* 
+					**/
 
 					if ( $field['type'] == 'gallery' ) { 
 						$gallery = empty($result[$field['key']]) ? [] : $result[$field['key']];

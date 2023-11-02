@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: TM Custom Fields
+ * Plugin Name: TM Custom Fields Lite
  * Plugin URI: #
- * Description: TMCF will help you to easily add custom fields (Gallery, Text, Number) in single post or page or custom post type.
- * Version: 1.0
+ * Description: TMCF will help you to easily add custom fields (Text, Number, Tel, Email, Select, Checkbox, Radio, Gallery, Colors ) in single post or page or custom post type.
+ * Version: 2.0
  * Requires at least: 5.7
  * Requires PHP: 7.2
  * Author: Kamrul Islam
@@ -26,7 +26,7 @@ define('TMG_PATH', plugin_dir_path(__FILE__));
 define('TMG_URL', plugin_dir_url(__FILE__));
 
 
-include_once TMG_PATH .'/settings/settings.php';
+include_once TMG_PATH .'/inc/settings.php';
 include_once TMG_PATH .'/inc/fields.php';
 
 class TMCF {

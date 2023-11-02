@@ -58,10 +58,10 @@ jQuery(document).ready(function($){
 						});			
 					}
 
-					$this.parents('.fields-item-wrap').find('.key').val(response);
+					$this.parents('.fields-item-wrap').find('.key').val(response).change();
 					$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ response +'"]');
 				} else {
-					$this.parents('.fields-item-wrap').find('.key').val(field_key);				
+					$this.parents('.fields-item-wrap').find('.key').val(field_key).change();				
 					$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ field_key +'"]');
 				}
 			}
@@ -143,7 +143,7 @@ jQuery(document).ready(function($){
 		if ( clone_wrap.length > 0 ) {
 			clone_option = clone_wrap.clone();
 			var current_key = $(this).parents('table').find('tbody tr').length;
-			var current_index = $(this).parents('.fields-item-wrap').data('index');
+			var current_index = $(this).parents('.fields-item-wrap').attr('data-index');
 			
 			jQuery.map(clone_option.find('input'), function(item, index){
 				var name = $(item).data('name');

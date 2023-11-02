@@ -1,7 +1,7 @@
-=== TM Custom Fields === 
+=== TM Custom Fields Lite === 
 
 Contributors: kamrulislam0093
-Tags: Wordpress custom fields, advanced custom fields, ultimate custom fields, Easy Custom Fields, wordpress gallery field, color field 
+Tags: Wordpress custom fields, advanced custom fields, ultimate custom fields, Easy Custom Fields, wordpress gallery field, color field, simple custom fields
 Donate link: # 
 Requires at least: 5.7 
 Tested up to: 6.3 
@@ -10,10 +10,10 @@ Stable tag: 1.0
 License: GPLv2 or later 
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-TM Custom Fields (TMCF) helps you easily customize WordPress with powerful, professional and intuitive fields from any posts, pages and any custom post types.
+TM Custom Fields (TMCF) helps you easily customize WordPress with powerful, professional and intuitive fields from any posts, pages and any custom post types. Its very Lite Version.
 
 == Description == 
-TM Custom Fields turns WordPress sites into a fully-fledged content management system by giving you all the tools to do more with your data.
+TM Custom Fields (Lite) turns WordPress sites into a fully-fledged content management system by giving you all the tools to do more with your data.
 
 Use the TMCF plugin to take full control of your WordPress edit screens, custom field data like text, number, tel, email, gallery etc.
 
@@ -46,5 +46,6 @@ Initial Release
 == Changelog ==
 
 = Version 1.0 =
+= Version 2.0 = Upgrade Lite Version
 
 Initial Release

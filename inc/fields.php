@@ -89,10 +89,10 @@ class TMCF_Fields {
 					if ( in_array($field['type'], ['text', 'number', 'tel', 'email', 'color']) ) {
 						$val = empty($result[$field['key']]) ? '' : $result[$field['key']];
 					?>
-						<div class="tmcf_field <?= $field['type'] ?>">
-							<label><?= $field['name']; ?></label>
-							<input type="<?= $field['type'] ?>" class="widefat" name="<?= $field_name; ?>" value="<?= $val; ?>" placeholder="<?= $placeholder; ?>">
-							<?= $copy_desc; ?>
+						<div class="tmcf_field <?php echo $field['type'] ?>">
+							<label><?php echo $field['name']; ?></label>
+							<input type="<?php echo $field['type'] ?>" class="widefat" name="<?php echo $field_name; ?>" value="<?php echo $val; ?>" placeholder="<?php echo $placeholder; ?>">
+							<?php echo $copy_desc; ?>
 						</div>
 					<?php 
 					}
@@ -107,21 +107,21 @@ class TMCF_Fields {
 					if ( $field['type'] == 'select' ) {
 						$select_val = empty($result[$field['key']]) ? '' : $result[$field['key']];
 					?>
-						<div class="tmcf_field <?= $field['type'] ?>">
-							<label><?= $field['name']; ?></label>
+						<div class="tmcf_field <?php echo $field['type'] ?>">
+							<label><?php echo $field['name']; ?></label>
 							<div>
 								<?php if ( !empty($field['option']) ): ?>
-									<select name="<?= $field_name ?>">
+									<select name="<?php echo $field_name ?>">
 										<option value="">Select</option>
 									<?php foreach ($field['option'] as $option): ?>
-										<option value="<?= $option['value']; ?>" <?= selected( $select_val, $option['value'] ); ?>><?= $option['name']; ?></option>
+										<option value="<?php echo $option['value']; ?>" <?php echo selected( $select_val, $option['value'] ); ?>><?php echo $option['name']; ?></option>
 									<?php endforeach ?>
 									</select>
 								<?php else: ?>
 
 								<?php endif ?>
 							</div>
-							<?= $copy_desc; ?>
+							<?php echo $copy_desc; ?>
 						</div>
 					<?php 
 					}
@@ -136,22 +136,22 @@ class TMCF_Fields {
 					if ( $field['type'] == 'radio' ) {
 						$radio_val = empty($result[$field['key']]) ? '' : $result[$field['key']];
 					?>
-						<div class="tmcf_field <?= $field['type'] ?>">
-							<label><?= $field['name']; ?></label>
+						<div class="tmcf_field <?php echo $field['type'] ?>">
+							<label><?php echo $field['name']; ?></label>
 							<ul class="radio_val">
 								<?php if ( !empty($field['option']) ): 
 									foreach ($field['option'] as $radio) { ?>
 										<li>
 											<label>
-												<input type="radio" name="<?= $field_name ?>" value="<?= $radio['value']; ?>" <?= checked( $radio_val, $radio['value'] ); ?>>
-												<?= $radio['name']; ?>
+												<input type="radio" name="<?php echo $field_name ?>" value="<?php echo $radio['value']; ?>" <?php echo checked( $radio_val, $radio['value'] ); ?>>
+												<?php echo $radio['name']; ?>
 											</label>
 										</li>
 									<?php }
 									?>
 								<?php endif ?>
 							</ul>
-							<?= $copy_desc; ?>
+							<?php echo $copy_desc; ?>
 						</div>
 					<?php 
 					}
@@ -166,22 +166,22 @@ class TMCF_Fields {
 					if ( $field['type'] == 'checkbox' ) {
 						$checkbox_val = empty($result[$field['key']]) ? [] : $result[$field['key']];
 					?>
-						<div class="tmcf_field <?= $field['type'] ?>">
-							<label><?= $field['name']; ?></label>
+						<div class="tmcf_field <?php echo $field['type'] ?>">
+							<label><?php echo $field['name']; ?></label>
 							<ul class="checkbox_val">
 								<?php if ( !empty($field['option']) ): 
 									foreach ($field['option'] as $checkbox) { ?>
 										<li>
 											<label>
-												<input type="checkbox" name="<?= $field_name ?>[]" value="<?= $checkbox['value']; ?>" <?= checked( in_array($checkbox['value'], $checkbox_val), 1 ); ?>>
-												<?= $checkbox['name']; ?>
+												<input type="checkbox" name="<?php echo $field_name ?>[]" value="<?php echo $checkbox['value']; ?>" <?php echo checked( in_array($checkbox['value'], $checkbox_val), 1 ); ?>>
+												<?php echo $checkbox['name']; ?>
 											</label>
 										</li>
 									<?php }
 									?>
 								<?php endif ?>
 							</ul>
-							<?= $copy_desc; ?>
+							<?php echo $copy_desc; ?>
 						</div>
 					<?php 
 					}
@@ -197,16 +197,16 @@ class TMCF_Fields {
 						$gallery = empty($result[$field['key']]) ? [] : $result[$field['key']];
 						?>
 						<div class="tmcf_field gallery">
-							<label><?= $field['name']; ?></label>
-							<div class="gallery_wrapper" data-name="<?= $field_name; ?>">
+							<label><?php echo $field['name']; ?></label>
+							<div class="gallery_wrapper" data-name="<?php echo $field_name; ?>">
 								<div class="img_box_container">
 								<?php foreach ($gallery as $item): 
 									$image_url = wp_get_attachment_image_src( $item );
 									?>
 										<div class="gallery_single_row">
 											<div class="gallery_area image_container">
-												<input class="meta_image_id" value="<?= $item; ?>" type="hidden" name="<?= $field_name; ?>[]" />
-												<img class="gallery_img_url" src="<?= $image_url[0]; ?>" height="55" width="55"/>
+												<input class="meta_image_id" value="<?php echo $item; ?>" type="hidden" name="<?php echo $field_name; ?>[]" />
+												<img class="gallery_img_url" src="<?php echo $image_url[0]; ?>" height="55" width="55"/>
 											</div>
 											<span class="button remove" title="Remove">
 												<span class="dashicons dashicons-trash"></span>
@@ -223,7 +223,7 @@ class TMCF_Fields {
 								  <input class="button add" type="button" value="+" title="Add image"/>
 								</div>
 							</div>
-							<?= $copy_desc; ?>
+							<?php echo $copy_desc; ?>
 						</div>
 					<?php }
 				} ?>			
@@ -254,21 +254,6 @@ class TMCF_Fields {
 		if ( isset($_POST['tmcf']) && !empty($_POST['tmcf']) ) {
 			update_post_meta( $post_id, 'display_tmcf', json_encode($_POST['tmcf']));
 		}	
-		// foreach ($this->get_settings_data() as $settings_id) {
-
-		// 	$fields = !empty(get_post_meta( $settings_id, 'tmcf_setting_fields', true)) ? json_decode(get_post_meta( $settings_id, 'tmcf_setting_fields', true), true) : [];
-		// 	$location = !empty(get_post_meta( $settings_id, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $settings_id, 'tmcf_setting_location', true)) : [];
-
-		// 	if ( isset($_POST['post_type']) && in_array($_POST['post_type'], $location) ) {
-		// 		$meta_id = sprintf('tmcf_%s', $settings_id);
-
-		// 		if ( isset($_POST[$meta_id]) && !empty($_POST[$meta_id]) ) {
-		// 			update_post_meta( $post_id, $meta_id, json_encode($_POST[$meta_id]));
-		// 		}
-		// 	}
-
-		// }
-
 	}
 }
 

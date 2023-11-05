@@ -1,30 +1,38 @@
-jQuery(document).ready(function($){
+;(function ($){
 	$('#TMCF_settings_fields_wrap .add').click(function(e){
 		e.preventDefault();
 
 		let indexElement = $('#TMCF_settings_fields_wrap .fields-item-wrap').length;
 
-		let clone_wrap = $(this).parents('#TMCF_settings_fields_wrap').find('.fields-item-wrap:last-child').clone();
+		let cloneWrap = $(this).parents('#TMCF_settings_fields_wrap').find('.fields-item-wrap:last-child').clone();
 
-		clone_wrap.find('.field-label input').attr('name', 'tmcf_fields['+ indexElement +'][name]').val('');
-		clone_wrap.find('.field-key input').attr('name', 'tmcf_fields['+ indexElement +'][key]').val('');
-		clone_wrap.find('.field-type select').attr('name', 'tmcf_fields['+ indexElement +'][type]').val('');
-		clone_wrap.find('.field-option tbody tr:gt(0)').remove();
+		cloneWrap.find('.field-label input').attr('name', 'tmcf_fields['+ indexElement +'][name]').val('');
+		cloneWrap.find('.field-key input').attr('name', 'tmcf_fields['+ indexElement +'][key]').val('');
+		cloneWrap.find('.field-type select').attr('name', 'tmcf_fields['+ indexElement +'][type]').val('');
+		cloneWrap.find('.field-placeholder input').attr('name', 'tmcf_fields['+ indexElement +'][placeholder]').val('');
+		cloneWrap.find('.field-option tbody tr:gt(0)').remove();
 
-		clone_wrap.find('.field-option tbody tr:first-child input[data-name="name"]').attr('name', 'tmcf_fields['+ indexElement +'][option][0][name]').val('');
-		clone_wrap.find('.field-option tbody tr:first-child input[data-name="value"]').attr('name', 'tmcf_fields['+ indexElement +'][option][0][value]').val('');
-		clone_wrap.attr('data-index', indexElement);
+		cloneWrap.find('.field-option tbody tr:first-child input[data-name="name"]').attr('name', 'tmcf_fields['+ indexElement +'][option][0][name]').val('');
+		cloneWrap.find('.field-option tbody tr:first-child input[data-name="value"]').attr('name', 'tmcf_fields['+ indexElement +'][option][0][value]').val('');
+		cloneWrap.attr('data-index', indexElement);
 
-		clone_wrap.find('.field-heading .name').text('Label');
-		clone_wrap.find('.field-heading .copy-key').html('<input type="text" value=\'[tmcf key="key"]\' readonly="">');
-		clone_wrap.find('.field-heading .type').text('Type');
+		cloneWrap.find('.field-heading .name').text('Label');
+		cloneWrap.find('.field-heading .copy-key').html('<input type="text" value=\'[tmcf key="key"]\' readonly="">');
+		cloneWrap.find('.field-heading .type').text('Type');
 
-		clone_wrap.appendTo($(this).parents('#TMCF_settings_fields_wrap').find('.fields-item-contents'));
-		clone_wrap.find('.field-content').slideDown();
-
+		cloneWrap.appendTo($(this).parents('#TMCF_settings_fields_wrap').find('.fields-item-contents'));
+		cloneWrap.find('.field-content').slideDown();
 
 		jQuery.map($('#TMCF_settings_fields_wrap .fields-item-wrap'), function(item, index){
+			$(item).find('.field-label input').attr('name', 'tmcf_fields['+ index +'][name]');
+			$(item).find('.field-key input').attr('name', 'tmcf_fields['+ index +'][key]');
+			$(item).find('.field-type select').attr('name', 'tmcf_fields['+ index +'][type]');
+			$(item).find('.field-placeholder input').attr('name', 'tmcf_fields['+ index +'][placeholder]');
+
+			$(item).find('.field-option tbody tr:first-child input[data-name="name"]').attr('name', 'tmcf_fields['+ index +'][option][0][name]');
+			$(item).find('.field-option tbody tr:first-child input[data-name="value"]').attr('name', 'tmcf_fields['+ index +'][option][0][value]');
 			$(item).attr('data-index', index);
+
 		});
 	});
 
@@ -37,11 +45,11 @@ jQuery(document).ready(function($){
 
 		var $this = $(this);
 		let name = $(this).val();
-		let field_name = name.replace(/['"]/g, "");
-		$(this).val(field_name);
-		$(this).parents('.fields-item-wrap').find('.field-heading .name').text(field_name);
+		let fieldName = name.replace(/['"]/g, "");
+		$(this).val(fieldName);
+		$(this).parents('.fields-item-wrap').find('.field-heading .name').text(fieldName);
 
-		let field_key = field_name.replace(/\s/g,'_').toLowerCase();
+		let field_key = fieldName.replace(/\s/g,'_').toLowerCase();
 		let post_id = $(this).parents('#TMCF_settings_fields_wrap').data('post_id');
 
 		jQuery.post(
@@ -107,12 +115,12 @@ jQuery(document).ready(function($){
 						}
 
 						$this.val(response);
-						$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ response +'"]');
+						$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ response +'"]\' readonly="">');
 						$this.siblings('.error').show();
 
 					} else {
 						$this.val(field_key);
-						$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ field_key +'"]');					
+						$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ field_key +'"]\' readonly="">');					
 					}
 				}
 			);
@@ -174,8 +182,14 @@ jQuery(document).ready(function($){
 		$(this).parents('.fields-item-wrap').remove();
 
 		jQuery.map($('#TMCF_settings_fields_wrap .fields-item-wrap'), function(item, index){
+			$(item).find('.field-label input').attr('name', 'tmcf_fields['+ index +'][name]');
+			$(item).find('.field-key input').attr('name', 'tmcf_fields['+ index +'][key]');
+			$(item).find('.field-type select').attr('name', 'tmcf_fields['+ index +'][type]');
+			$(item).find('.field-placeholder input').attr('name', 'tmcf_fields['+ index +'][placeholder]');
+			$(item).find('.field-option tbody tr:first-child input[data-name="name"]').attr('name', 'tmcf_fields['+ index +'][option][0][name]');
+			$(item).find('.field-option tbody tr:first-child input[data-name="value"]').attr('name', 'tmcf_fields['+ index +'][option][0][value]');
 			$(item).attr('data-index', index);
-		});		
+		});	
 	});
 
 	$('#TMCF_settings_fields_wrap').on('change', '.field-type select', function(e){
@@ -191,4 +205,4 @@ jQuery(document).ready(function($){
 		}
 	});
 
-});
+})(jQuery);

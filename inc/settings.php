@@ -99,7 +99,7 @@ class TM_Settings {
 	public function settings_metabox() {
 		add_meta_box(
 			'tmcf_location_rules',
-			'Location Rules',
+			__('Location Rules', 'tmcf_lite' ),
 			[$this, 'location_rules'],
 			'tmcf_settings', 
 			'side',
@@ -108,7 +108,7 @@ class TM_Settings {
 
 		add_meta_box(
 			'tmcf_settings_fields',
-			'Fields',
+			__( 'Fields', 'tmcf_lite' ),
 			[$this, 'setting_fields'],
 			'tmcf_settings', 
 			'normal',
@@ -165,8 +165,8 @@ class TM_Settings {
 				<ul>
 					<?php foreach ($this->getPostTypes() as $key => $value):
 						?>
-						<li><label><input type="checkbox" id="post_type_<?= $key ?>" name="location[]" value="<?= $value ?>"
-						<?php checked( in_array($value, $setting_location), 1, true); ?>><?= $value ?></label></li>
+						<li><label><input type="checkbox" id="post_type_<?php echo $key ?>" name="location[]" value="<?php echo $value ?>"
+						<?php checked( in_array($value, $setting_location), 1, true); ?>><?php echo $value ?></label></li>
 					<?php endforeach ?>
 				</ul>
 			</div>
@@ -177,26 +177,26 @@ class TM_Settings {
 
 		$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : $this->set_default_data();
 		?>
-		<div id="TMCF_settings_fields_wrap" data-post_id="<?= $post->ID; ?>">
+		<div id="TMCF_settings_fields_wrap" data-post_id="<?php echo $post->ID; ?>">
 			<div class="fields-wrap">
 				<div class="fields-item-contents">
 						<?php 
 							if ( !empty($setting_fields) ) {
 								foreach ($setting_fields as $key => $item) {
 						?>					
-					<div class="fields-item-wrap <?= $item['type']; ?>" data-index="<?= $key; ?>">
+					<div class="fields-item-wrap <?php echo $item['type']; ?>" data-index="<?php echo $key; ?>">
 						<div class="field-heading">
 							<div class="tmcf-row">
 								<div class="tmcf-col">
-									<span class="name"><?= $item['name']; ?></span>
+									<span class="name"><?php echo $item['name']; ?></span>
 								</div>
 								<div class="tmcf-col key-field">
 									<span class="copy-key">
-										<input type="text" value='[tmcf key="<?= $item['key']; ?>"]' readonly>
+										<input type="text" value='[tmcf key="<?php echo $item['key']; ?>"]' readonly>
 									</span>
 								</div>
 								<div class="tmcf-col type-field">
-									<span class="type"><?= $item['type']; ?></span>
+									<span class="type"><?php echo $item['type']; ?></span>
 								</div>
 								<div class="tmcf-col trash">
 									<span class="dashicons dashicons-trash"></span>
@@ -207,59 +207,59 @@ class TM_Settings {
 						<div class="field-content">
 							<div class="field-component field-label">
 								<div class="field-meta">
-									<label>Label</label>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,</p>							
+									<label><?php _e( 'Label', 'tmcf_lite' ); ?></label>
+									<p><?php _e( 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,', 'tmcf_lite' ); ?></p>							
 								</div>
 								<div class="field-control">
-									<input type="text" name="tmcf_fields[<?= $key; ?>][name]" value="<?= $item['name']; ?>" placeholder="Name" class="name">
+									<input type="text" name="tmcf_fields[<?php echo $key; ?>][name]" value="<?php echo $item['name']; ?>" placeholder="<?php _e( 'Name', 'tmcf_lite' ); ?>" class="name">
 								</div>
 							</div>
 							<div class="field-component field-key">
 								<div class="field-meta">
-									<label>Name/Key</label>
-									<p>Name/Key field will be stored in the database and will help to display on your website. Should contain only Latin letters, numbers, '-' or '_' chars.</p>							
+									<label><?php _e( 'Name/Key', 'tmcf_lite' ); ?></label>
+									<p><?php _e( 'Name/Key field will be stored in the database and will help to display on your website. Should contain only Latin letters, numbers, "-" or "_" chars.', 'tmcf_lite' ); ?></p>
 								</div>
 								<div class="field-control">
-									<input type="text" class="key" name="tmcf_fields[<?= $key; ?>][key]" value="<?= $item['key']; ?>" placeholder="Key">
-									<p class="error">Key is already exist.</p>									
+									<input type="text" class="key" name="tmcf_fields[<?php echo $key; ?>][key]" value="<?php echo $item['key']; ?>" placeholder="<?php _e( 'Key', 'tmcf_lite' ); ?>">
+									<p class="error"><?php _e( 'Key is already exist.', 'tmcf_lite' ); ?></p>
 								</div>
 							</div>	
 
 							<div class="field-component field-type">
 								<div class="field-meta">
-									<label>Field Type</label>
-									<p>Field type defines the way field to be displayed on Post edit page.</p>							
+									<label><?php _e( 'Field Type', 'tmcf_lite' ); ?></label>
+									<p><?php _e( 'Field type defines the way field to be displayed on Post edit page.', 'tmcf_lite' ); ?></p>
 								</div>
 								<div class="field-control">
-									<select name="tmcf_fields[<?= $key; ?>][type]">
-										<option value="">Select Field Type</option>
+									<select name="tmcf_fields[<?php echo $key; ?>][type]">
+										<option value=""><?php _e( 'Select Field Type', 'tmcf_lite' ); ?></option>
 										<?php foreach ($this->fields_type() as $field_key => $field): ?>
-											<option value="<?= $field_key ?>" <?= selected( $item['type'], $field_key ); ?>><?= $field; ?></option>						
+											<option value="<?php echo $field_key ?>" <?php echo selected( $item['type'], $field_key ); ?>><?php echo $field; ?></option>						
 										<?php endforeach ?>
 									</select>
 								</div>
 							</div>
 
-							<div class="field-component field-option" data-type="<?= $item['type']; ?>">
+							<div class="field-component field-option" data-type="<?php echo $item['type']; ?>">
 								<div class="field-meta">
-									<label>Field Options</label>
-									<p>Field Options will be show in field type option.</p>							
+									<label><?php _e( 'Field Options', 'tmcf_lite' ); ?></label>
+									<p><?php _e( 'Field Options will be show in field type option.', 'tmcf_lite' ); ?></p>							
 								</div>
 								<div class="field-control">
 									<div class="field-control-option">
 										<table>
 											<thead>
 												<tr>
-													<th>Name</th>
-													<th>Value</th>
+													<th><?php _e( 'Name', 'tmcf_lite' ); ?></th>
+													<th><?php _e( 'Value', 'tmcf_lite' ); ?></th>
 												</tr>
 											</thead>
 											<tbody>
 												<?php if ( !empty($item['option']) ): ?>
 													<?php foreach ($item['option'] as $option_key => $option): ?>
 													<tr>
-														<td><input type="text" data-name="name" name="tmcf_fields[<?= $key; ?>][option][<?= $option_key; ?>][name]" placeholder="Option Name" value="<?= $option['name']; ?>" ></td>
-														<td><input type="text" data-name="value" name="tmcf_fields[<?= $key; ?>][option][<?= $option_key; ?>][value]" placeholder="Option Value" value="<?= $option['value']; ?>"></td>
+														<td><input type="text" data-name="name" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][name]" placeholder="<?php _e( 'Option Name', 'tmcf_lite' ); ?>" value="<?php echo $option['name']; ?>" ></td>
+														<td><input type="text" data-name="value" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][value]" placeholder="<?php _e( 'Option Value', 'tmcf_lite' ); ?>" value="<?php echo $option['value']; ?>"></td>
 														<td class="remove-option">
 															<?php 
 																if ( $option_key > 0 ) {
@@ -267,19 +267,23 @@ class TM_Settings {
 																}
 															 ?>
 														</td>
-													</tr>	
+													</tr>
 												<?php endforeach ?>
 												<?php else: ?>
 													<tr>
-														<td><input type="text" data-name="name" name="tmcf_fields[<?= $key; ?>][option][<?= $option_key; ?>][name]" placeholder="Option Name" value="<?= $option['name']; ?>" ></td>
-														<td><input type="text" data-name="value" name="tmcf_fields[<?= $key; ?>][option][0][value]" placeholder="Option Value" value="<?= $option['value']; ?>"></td>
+														<td>
+															<input type="text" data-name="name" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][name]" placeholder="<?php _e( 'Option Name', 'tmcf_lite' ); ?>" value="<?php echo $option['name']; ?>" />
+														</td>
+														<td>
+															<input type="text" data-name="value" name="tmcf_fields[<?php echo $key; ?>][option][0][value]" placeholder="<?php _e( 'Option Value', 'tmcf_lite' ); ?>" value="<?php echo $option['value']; ?>" />
+														</td>
 														<td class="remove-option"></td>
 													</tr>		
 												<?php endif ?>
 											</tbody>
 											<tfoot>
 												<tr>
-													<td><button class="button-primary add_option">New Field Option</button></td>
+													<td><button class="button-primary add_option"><?php _e( 'New Field Option', 'tmcf_lite' ); ?></button></td>
 												</tr>
 											</tfoot>
 										</table>
@@ -287,13 +291,13 @@ class TM_Settings {
 								</div>								
 							</div>
 
-							<div class="field-component field-placeholder <?= in_array($item['type'], ['text', 'number', 'tel', 'email' ]) ? 'active' : ''; ?>">
+							<div class="field-component field-placeholder <?php echo in_array($item['type'], ['text', 'number', 'tel', 'email' ]) ? 'active' : ''; ?>">
 								<div class="field-meta">
-									<label>Placeholder</label>
-									<p>Pleaseholder text</p>							
+									<label><?php _e( 'Placeholder', 'tmcf_lite' ); ?></label>
+									<p><?php _e( 'Placeholder text', 'tmcf_lite' ); ?></p>							
 								</div>
 								<div class="field-control">
-									<input type="text" class="placeholder" name="tmcf_fields[<?= $key; ?>][placeholder]" value="<?= $item['placeholder']; ?>" placeholder="Placeholder">								
+									<input type="text" class="placeholder" name="tmcf_fields[<?php echo $key; ?>][placeholder]" value="<?php echo $item['placeholder']; ?>" placeholder="<?php _e( 'Placeholder', 'tmcf_lite' ); ?>">
 								</div>
 							</div>								
 						</div>						
@@ -306,7 +310,7 @@ class TM_Settings {
 			</div>
 
 			<div class="btn-wrap">
-				<button class="add button-primary">Add Field</button>				
+				<button class="add button-primary"><?php _e( 'Add Field', 'tmcf_lite' ); ?></button>				
 			</div>
 		</div>
 		<?php 

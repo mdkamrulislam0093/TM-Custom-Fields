@@ -73,8 +73,8 @@ class TM_Settings {
 	public function post_enqueue() {
 
 		if ( !empty(get_current_screen()) && get_current_screen()->post_type == 'tmcf_settings' ) {
-			wp_enqueue_style( 'tm_settings_style', TMG_URL . 'assets/settings/css/style.css');
-			wp_enqueue_script( 'tm_settings_script', TMG_URL . 'assets/settings/js/settings.js', [ 'jquery' ], '1.0', true );
+			wp_enqueue_style( 'tm_settings_style', TMG_URL . 'assets/settings/css/style.css', [], rand(1, 100));
+			wp_enqueue_script( 'tm_settings_script', TMG_URL . 'assets/settings/js/settings.js', [ 'jquery' ], rand(1, 100), true );
 			wp_localize_script( 'tm_settings_script', 'tm_settings_object', [
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			]);

@@ -36,15 +36,18 @@
 #TMCF_settings_fields_wrap .field-content {
   display: none;
 }
-/*#TMCF_settings_fields_wrap .fields-item-contents .field-heading .tmcf-col {
-  padding: 8px 10px;
-}*/
 #TMCF_settings_fields_wrap .fields-item-wrap {
   background: #fff;
-/*  padding: 15px 20px;*/
   margin-bottom: 30px;
   box-shadow: 0 0 5px 2px #dddddd69;
   border-radius: 5px;
+}
+.post-type-tmcf_settings #submitpost #minor-publishing {
+  display: none;
+}
+#TMCF_settings_fields_wrap .fields-item-wrap:first-child .dashicons-trash {
+  opacity: 0;
+  visibility: hidden;
 }
 #TMCF_settings_fields_wrap .fields-item-wrap .tmcf-col {
   padding: 15px 20px;

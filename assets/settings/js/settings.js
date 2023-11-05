@@ -1,8 +1,10 @@
 jQuery(document).ready(function($){
 	$('#TMCF_settings_fields_wrap .add').click(function(e){
 		e.preventDefault();
+
+		let indexElement = $('#TMCF_settings_fields_wrap .fields-item-wrap').length;
+
 		let clone_wrap = $(this).parents('#TMCF_settings_fields_wrap').find('.fields-item-wrap:last-child').clone();
-		let indexElement = clone_wrap.data('index') + 1;
 
 		clone_wrap.find('.field-label input').attr('name', 'tmcf_fields['+ indexElement +'][name]').val('');
 		clone_wrap.find('.field-key input').attr('name', 'tmcf_fields['+ indexElement +'][key]').val('');
@@ -14,11 +16,16 @@ jQuery(document).ready(function($){
 		clone_wrap.attr('data-index', indexElement);
 
 		clone_wrap.find('.field-heading .name').text('Label');
-		clone_wrap.find('.field-heading .copy-key').text('Key');
+		clone_wrap.find('.field-heading .copy-key').html('<input type="text" value=\'[tmcf key="key"]\' readonly="">');
 		clone_wrap.find('.field-heading .type').text('Type');
 
 		clone_wrap.appendTo($(this).parents('#TMCF_settings_fields_wrap').find('.fields-item-contents'));
 		clone_wrap.find('.field-content').slideDown();
+
+
+		jQuery.map($('#TMCF_settings_fields_wrap .fields-item-wrap'), function(item, index){
+			$(item).attr('data-index', index);
+		});
 	});
 
 
@@ -133,8 +140,9 @@ jQuery(document).ready(function($){
 		e.preventDefault();
 		$(this).parents('.fields-item-wrap').find('.field-content').slideToggle();
 		$(this).parents('.fields-item-wrap').toggleClass('active');
-
 	});
+
+	
 
 	$('#TMCF_settings_fields_wrap').on('click', '.field-option .add_option', function(e){
 		e.preventDefault();
@@ -160,10 +168,14 @@ jQuery(document).ready(function($){
 		$(this).parents('tr').remove();
 	});
 	 
-	$('#TMCF_settings_fields_wrap').on('click', '.field-heading .tmcf-col.dashicons-trash', function(e){
+	$('#TMCF_settings_fields_wrap').on('click', '.field-heading .tmcf-col .dashicons-trash', function(e){
 		e.preventDefault();
 
 		$(this).parents('.fields-item-wrap').remove();
+
+		jQuery.map($('#TMCF_settings_fields_wrap .fields-item-wrap'), function(item, index){
+			$(item).attr('data-index', index);
+		});		
 	});
 
 	$('#TMCF_settings_fields_wrap').on('change', '.field-type select', function(e){

@@ -3,7 +3,7 @@
  * Plugin Name: TM Custom Fields Lite
  * Plugin URI: #
  * Description: TMCF will help you to easily add custom fields (Text, Number, Tel, Email, Select, Checkbox, Radio, Gallery, Colors ) in single post or page or custom post type.
- * Version: 2.0
+ * Version: 3.0
  * Requires at least: 5.7
  * Requires PHP: 7.2
  * Author: Kamrul Islam

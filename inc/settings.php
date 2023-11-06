@@ -151,7 +151,8 @@ class TM_Settings {
 						'name' => '',
 						'value' => ''
 					]
-				]
+				],
+				'placeholder' => ''
 			]
 		];
 
@@ -183,6 +184,8 @@ class TM_Settings {
 						<?php 
 							if ( !empty($setting_fields) ) {
 								foreach ($setting_fields as $key => $item) {
+									if ( !empty($item['type']) && !empty($item['name']) && !empty($item['key']) ) {
+
 						?>					
 					<div class="fields-item-wrap <?php echo $item['type']; ?>" data-index="<?php echo $key; ?>">
 						<div class="field-heading">
@@ -301,12 +304,13 @@ class TM_Settings {
 									<p><?php _e( 'Placeholder text', 'tmcf_lite' ); ?></p>							
 								</div>
 								<div class="field-control">
-									<input type="text" class="placeholder" name="tmcf_fields[<?php echo $key; ?>][placeholder]" value="<?php echo $item['placeholder']; ?>" placeholder="<?php _e( 'Placeholder', 'tmcf_lite' ); ?>">
+									<input type="text" class="placeholder" name="tmcf_fields[<?php echo $key; ?>][placeholder]" value="<?php echo !empty($item['placeholder']) ? $item['placeholder'] : ''; ?>" placeholder="<?php _e( 'Placeholder', 'tmcf_lite' ); ?>">
 								</div>
 							</div>								
 						</div>						
 					</div>
 					<?php 
+							}					
 						}
 					}
 					 ?>

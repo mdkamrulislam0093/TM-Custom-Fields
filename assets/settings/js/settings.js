@@ -85,7 +85,7 @@
 
 	$('#TMCF_settings_fields_wrap').on('blur', '.fields-wrap .key', function(e){
 		e.preventDefault();
-		$('#TMCF_settings_fields_wrap error').hide();
+		$('#TMCF_settings_fields_wrap .error').hide();
 		
 		var $this = $(this);
 		let field_key = $(this).val();
@@ -101,7 +101,6 @@
 					'post_id': post_id
 				}, 
 				function(response) {
-					console.log(response);
 					if ( response.length > 0 ) {
 
 						let field_wrap = $this.parents('.fields-item-wrap').siblings();
@@ -116,8 +115,10 @@
 
 						$this.val(response);
 						$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ response +'"]\' readonly="">');
-						$this.siblings('.error').show();
 
+						if ( field_key != response ) {
+							$this.siblings('.error').show();
+						}
 					} else {
 						$this.val(field_key);
 						$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ field_key +'"]\' readonly="">');					
@@ -125,8 +126,6 @@
 				}
 			);
 		}
-
-
 	});
 
 	$('#TMCF_settings_fields_wrap').on('click', '.field-heading .copy-key', function(e){
@@ -149,8 +148,6 @@
 		$(this).parents('.fields-item-wrap').find('.field-content').slideToggle();
 		$(this).parents('.fields-item-wrap').toggleClass('active');
 	});
-
-	
 
 	$('#TMCF_settings_fields_wrap').on('click', '.field-option .add_option', function(e){
 		e.preventDefault();
@@ -205,4 +202,43 @@
 		}
 	});
 
+	$('#TMCF_settings_fields_wrap').on('blur', '.field-control .field_option_name', function(e){
+		e.preventDefault();
+
+		let optionName = $(this).val();
+		let optionNameUn = optionName.replace(/['"]/g, "");
+		let optionVal = optionNameUn.replace(/\s/g,'_').toLowerCase();
+
+		let options = $(this).parents('tr').siblings();
+
+		if ( options.length > 0 ) {
+			jQuery.map(options, function(item, index){
+				if ( $(item).find('.field_option_value').val() == optionVal ) {
+					optionVal = optionVal + '_copy';
+				}
+			});
+		}
+
+		$(this).parents('tr').find('.field_option_value').val(optionVal);
+	});
+
+	$('#TMCF_settings_fields_wrap').on('blur', '.field-control .field_option_value', function(e){
+		e.preventDefault();
+
+		let optionVal = $(this).val();
+
+
+		let options = $(this).parents('tr').siblings();
+
+		if ( options.length > 0 ) {
+			jQuery.map(options, function(item, index){
+				if ( $(item).find('.field_option_value').val() == optionVal ) {
+					optionVal = optionVal + '_copy';
+				}
+			});
+		}
+
+		$(this).val(optionVal);
+	});
+	
 })(jQuery);

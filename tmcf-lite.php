@@ -7,7 +7,7 @@
  * Requires at least: 5.7
  * Requires PHP: 7.2
  * Author: Kamrul Islam
- * Author URI: http://themeey.com/
+ * Author URI: https://github.com/mdkamrulislam0093
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: tmcf_lite
@@ -44,6 +44,13 @@ class TMCF {
 	public function __construct(){
 		add_action( 'plugins_loaded', [$this, 'load_textdomain'] );
 		add_shortcode( 'tmcf', [$this, 'frontend_display'] );
+
+		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), [$this, 'action_links'] );
+	}
+
+	public function action_links( $actions ){
+		$actions[] = '<a href="'. esc_url( get_admin_url(null, 'edit.php?post_type=tmcf_settings') ) .'">Settings</a>';
+		return $actions;
 	}
 
 	public function frontend_display($atts) {
@@ -78,4 +85,3 @@ class TMCF {
 TMCF::get_instance();
 $settings = TM_Settings::get_instance();
 TMCF_Fields::get_instance($settings->getPostTypes());
-

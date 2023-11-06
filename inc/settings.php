@@ -252,14 +252,18 @@ class TM_Settings {
 												<tr>
 													<th><?php _e( 'Name', 'tmcf_lite' ); ?></th>
 													<th><?php _e( 'Value', 'tmcf_lite' ); ?></th>
+													<th></th>
+													<th></th>
 												</tr>
 											</thead>
 											<tbody>
 												<?php if ( !empty($item['option']) ): ?>
 													<?php foreach ($item['option'] as $option_key => $option): ?>
 													<tr>
-														<td><input type="text" data-name="name" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][name]" placeholder="<?php _e( 'Option Name', 'tmcf_lite' ); ?>" value="<?php echo $option['name']; ?>" ></td>
-														<td><input type="text" data-name="value" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][value]" placeholder="<?php _e( 'Option Value', 'tmcf_lite' ); ?>" value="<?php echo $option['value']; ?>"></td>
+														<td><input type="text" class="field_option_name" data-name="name" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][name]" placeholder="<?php _e( 'Option Name', 'tmcf_lite' ); ?>" value="<?php echo $option['name']; ?>" ></td>
+														<td>
+															<input type="text" class="field_option_value" data-name="value" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][value]" placeholder="<?php _e( 'Option Value', 'tmcf_lite' ); ?>" value="<?php echo $option['value']; ?>">
+														</td>
 														<td class="remove-option">
 															<?php 
 																if ( $option_key > 0 ) {
@@ -272,10 +276,10 @@ class TM_Settings {
 												<?php else: ?>
 													<tr>
 														<td>
-															<input type="text" data-name="name" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][name]" placeholder="<?php _e( 'Option Name', 'tmcf_lite' ); ?>" value="<?php echo $option['name']; ?>" />
+															<input type="text" class="field_option_name"  data-name="name" name="tmcf_fields[<?php echo $key; ?>][option][<?php echo $option_key; ?>][name]" placeholder="<?php _e( 'Option Name', 'tmcf_lite' ); ?>" value="<?php echo $option['name']; ?>" />
 														</td>
 														<td>
-															<input type="text" data-name="value" name="tmcf_fields[<?php echo $key; ?>][option][0][value]" placeholder="<?php _e( 'Option Value', 'tmcf_lite' ); ?>" value="<?php echo $option['value']; ?>" />
+															<input type="text" class="field_option_value" data-name="value" name="tmcf_fields[<?php echo $key; ?>][option][0][value]" placeholder="<?php _e( 'Option Value', 'tmcf_lite' ); ?>" value="<?php echo $option['value']; ?>" />
 														</td>
 														<td class="remove-option"></td>
 													</tr>		

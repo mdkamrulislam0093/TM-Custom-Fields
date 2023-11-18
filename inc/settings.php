@@ -341,15 +341,15 @@ class TM_Settings {
 			return;
 		}
 
-		if ( isset($_POST['post_type']) && 'tmcf_settings' != $_POST['post_type'] ) {
+		if ( !isset($_POST['post_type']) && 'tmcf_settings' != $_POST['post_type'] ) {
 			return;
 		}
 
-		if ( isset($_POST['location']) ) {
+		if ( isset($_POST['location']) && !empty($_POST['location']) ) {
 			update_post_meta( $post_id, 'tmcf_setting_location', implode(',', $_POST['location']));
 		}
 
-		if ( isset($_POST['tmcf_fields']) ) {
+		if ( isset($_POST['tmcf_fields']) && !empty($_POST['tmcf_fields']) ) {
 			update_post_meta( $post_id, 'tmcf_setting_fields', json_encode($_POST['tmcf_fields']));
 		}
 	}

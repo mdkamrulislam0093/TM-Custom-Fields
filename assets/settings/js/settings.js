@@ -56,6 +56,7 @@
 			tm_settings_object.ajaxurl, 
 			{
 				'action': 'checking_field_key',
+				'nonce': tm_settings_object.nonce,
 				'field_key': field_key,
 				'post_id': post_id
 			}, 
@@ -97,6 +98,7 @@
 				tm_settings_object.ajaxurl, 
 				{
 					'action': 'checking_field_key',
+					'nonce': tm_settings_object.nonce,
 					'field_key': field_key,
 					'post_id': post_id
 				}, 

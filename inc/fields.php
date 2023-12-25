@@ -252,7 +252,7 @@ class TMCF_Fields {
 		}
 
 		if ( isset($_POST['tmcf']) && !empty($_POST['tmcf']) ) {
-			update_post_meta( $post_id, 'display_tmcf', json_encode($_POST['tmcf']));
+			update_post_meta( $post_id, 'display_tmcf', wp_json_encode($_POST['tmcf']));
 		}	
 	}
 }

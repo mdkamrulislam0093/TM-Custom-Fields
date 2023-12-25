@@ -37,6 +37,11 @@ class TM_Settings {
 	*/
 	public function checking_field_key() {
 
+	     // Check for nonce security      
+	     if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-nonce' ) ) {
+	         wp_die();
+	     }
+
 		$posts = get_posts([
 			'post_type'		=> 'tmcf_settings',
 			'numberposts' 	=> -1,
@@ -73,10 +78,11 @@ class TM_Settings {
 	public function post_enqueue() {
 
 		if ( !empty(get_current_screen()) && get_current_screen()->post_type == 'tmcf_settings' ) {
-			wp_enqueue_style( 'tm_settings_style', TMG_URL . 'assets/settings/css/style.css', [], rand(1, 100));
-			wp_enqueue_script( 'tm_settings_script', TMG_URL . 'assets/settings/js/settings.js', [ 'jquery' ], rand(1, 100), true );
+			wp_enqueue_style( 'tm_settings_style', TMG_URL . 'assets/settings/css/style.css', [], wp_rand(1, 100));
+			wp_enqueue_script( 'tm_settings_script', TMG_URL . 'assets/settings/js/settings.js', [ 'jquery' ], wp_rand(1, 100), true );
 			wp_localize_script( 'tm_settings_script', 'tm_settings_object', [
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce('ajax-nonce')
 			]);
 		}
 
@@ -160,6 +166,7 @@ class TM_Settings {
 	}
 
 	public function location_rules($post) {
+		wp_nonce_field( basename(__FILE__), 'tmcf_location_rules' );
 		$setting_location = !empty(get_post_meta( $post->ID, 'tmcf_setting_location', true)) ? explode(',', get_post_meta( $post->ID, 'tmcf_setting_location', true)) : [];
 		?>
 			<div class="location-rules">
@@ -175,7 +182,7 @@ class TM_Settings {
 	}
 
 	public function setting_fields($post) {
-
+		wp_nonce_field( basename(__FILE__), 'tmcf_setting_fields' );
 		$setting_fields = !empty(get_post_meta( $post->ID, 'tmcf_setting_fields', true)) ? json_decode( get_post_meta( $post->ID, 'tmcf_setting_fields', true), true) : $this->set_default_data();
 		?>
 		<div id="TMCF_settings_fields_wrap" data-post_id="<?php echo $post->ID; ?>">
@@ -332,6 +339,7 @@ class TM_Settings {
 
 		$is_autosave = wp_is_post_autosave( $post_id );
 		$is_revision = wp_is_post_revision( $post_id );
+		
 
 		if ( $is_autosave || $is_revision ) {
 				return;
@@ -345,12 +353,15 @@ class TM_Settings {
 			return;
 		}
 
-		if ( isset($_POST['location']) && !empty($_POST['location']) ) {
+
+		if ( isset($_POST['location']) && !empty($_POST['location']) && isset($_POST['tmcf_location_rules']) &&  wp_verify_nonce ( $_POST['tmcf_location_rules'], basename(__FILE__)) ) {
+			error_log('location');
 			update_post_meta( $post_id, 'tmcf_setting_location', implode(',', $_POST['location']));
 		}
 
-		if ( isset($_POST['tmcf_fields']) && !empty($_POST['tmcf_fields']) ) {
-			update_post_meta( $post_id, 'tmcf_setting_fields', json_encode($_POST['tmcf_fields']));
+		if ( isset($_POST['tmcf_fields']) && !empty($_POST['tmcf_fields']) && isset($_POST['tmcf_setting_fields']) &&  wp_verify_nonce ( $_POST['tmcf_setting_fields'], basename(__FILE__)) ) {
+			error_log('section');			
+			update_post_meta( $post_id, 'tmcf_setting_fields', wp_json_encode($_POST['tmcf_fields']));
 		}
 	}
 

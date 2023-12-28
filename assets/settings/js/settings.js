@@ -77,10 +77,10 @@
 					}
 
 					$this.parents('.fields-item-wrap').find('.key').val(response).change();
-					$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ response +'"]');
+					$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ response +'"]\' readonly="">');
 				} else {
 					$this.parents('.fields-item-wrap').find('.key').val(field_key).change();				
-					$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ field_key +'"]');
+					$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ field_key +'"]\' readonly="">');
 				}
 
 				$selectType = $this.parents('.fields-item-wrap').find('.field-type select');
@@ -132,7 +132,7 @@
 						}
 					} else {
 						$this.val(field_key);
-						$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ field_key +'"]\' readonly="">');					
+						$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ field_key +'"]\' readonly="">');
 					}
 
 					$selectType = $this.parents('.fields-item-wrap').find('.field-type select');

@@ -354,8 +354,13 @@ class TM_Settings {
 		}
 
 
-		if ( isset($_POST['location']) && !empty($_POST['location']) && isset($_POST['tmcf_location_rules']) &&  wp_verify_nonce ( $_POST['tmcf_location_rules'], basename(__FILE__)) ) {
-			update_post_meta( $post_id, 'tmcf_setting_location', implode(',', $_POST['location']));
+		if ( isset($_POST['tmcf_location_rules']) &&  wp_verify_nonce ( $_POST['tmcf_location_rules'], basename(__FILE__)) ) {
+			if ( isset($_POST['location']) && !empty($_POST['location']) ) {
+				update_post_meta( $post_id, 'tmcf_setting_location', implode(',', $_POST['location']));
+			} else {
+				update_post_meta( $post_id, 'tmcf_setting_location', '');
+			}
+
 		}
 
 		if ( isset($_POST['tmcf_fields']) && !empty($_POST['tmcf_fields']) && isset($_POST['tmcf_setting_fields']) &&  wp_verify_nonce ( $_POST['tmcf_setting_fields'], basename(__FILE__)) ) {	

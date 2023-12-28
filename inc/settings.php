@@ -20,7 +20,7 @@ class TM_Settings {
 	public function __construct(){
 		add_action( 'init', [$this, 'init'] );
 		add_action( 'add_meta_boxes', [$this, 'settings_metabox']);
-		add_action( 'save_post', [$this, 'save_settings'] );
+		add_action( 'save_post', [$this, 'save_settings'], 10, 2 );
 
 		add_action( 'admin_print_scripts-post-new.php', [$this, 'post_enqueue']);	
 		add_action( 'admin_print_scripts-post.php', [$this, 'post_enqueue']);	
@@ -98,7 +98,8 @@ class TM_Settings {
 			'show_ui'			=> true,
 			'menu_position'		=> 99,
 			'supports'			=> array( 'title' ),
-			'show_in_rest'		=> false
+			'show_in_rest'		=> false,
+			'menu_icon'			=> 'dashicons-list-view'
 		]);
 	}
 
@@ -217,31 +218,31 @@ class TM_Settings {
 						<div class="field-content">
 							<div class="field-component field-label">
 								<div class="field-meta">
-									<label><?php _e( 'Label', 'tmcf_lite' ); ?></label>
+									<label><?php _e( 'Label', 'tmcf_lite' ); ?> <span style="color: red;">*</span></label>
 									<p><?php _e( 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,', 'tmcf_lite' ); ?></p>							
 								</div>
 								<div class="field-control">
-									<input type="text" name="tmcf_fields[<?php echo $key; ?>][name]" value="<?php echo $item['name']; ?>" placeholder="<?php _e( 'Name', 'tmcf_lite' ); ?>" class="name">
+									<input type="text" name="tmcf_fields[<?php echo $key; ?>][name]" value="<?php echo $item['name']; ?>" placeholder="<?php _e( 'Name', 'tmcf_lite' ); ?>" class="name" required>
 								</div>
 							</div>
 							<div class="field-component field-key">
 								<div class="field-meta">
-									<label><?php _e( 'Name/Key', 'tmcf_lite' ); ?></label>
+									<label><?php _e( 'Name/Key', 'tmcf_lite' ); ?> <span style="color: red;">*</span></label>
 									<p><?php _e( 'Name/Key field will be stored in the database and will help to display on your website. Should contain only Latin letters, numbers, "-" or "_" chars.', 'tmcf_lite' ); ?></p>
 								</div>
 								<div class="field-control">
-									<input type="text" class="key" name="tmcf_fields[<?php echo $key; ?>][key]" value="<?php echo $item['key']; ?>" placeholder="<?php _e( 'Key', 'tmcf_lite' ); ?>">
+									<input type="text" class="key" name="tmcf_fields[<?php echo $key; ?>][key]" value="<?php echo $item['key']; ?>" placeholder="<?php _e( 'Key', 'tmcf_lite' ); ?>" required>
 									<p class="error"><?php _e( 'Key is already exist.', 'tmcf_lite' ); ?></p>
 								</div>
 							</div>	
 
 							<div class="field-component field-type">
 								<div class="field-meta">
-									<label><?php _e( 'Field Type', 'tmcf_lite' ); ?></label>
+									<label><?php _e( 'Field Type', 'tmcf_lite' ); ?> <span style="color: red;">*</span></label>
 									<p><?php _e( 'Field type defines the way field to be displayed on Post edit page.', 'tmcf_lite' ); ?></p>
 								</div>
 								<div class="field-control">
-									<select name="tmcf_fields[<?php echo $key; ?>][type]">
+									<select name="tmcf_fields[<?php echo $key; ?>][type]" required>
 										<option value=""><?php _e( 'Select Field Type', 'tmcf_lite' ); ?></option>
 										<?php foreach ($this->fields_type() as $field_key => $field): ?>
 											<option value="<?php echo $field_key ?>" <?php echo selected( $item['type'], $field_key ); ?>><?php echo $field; ?></option>						
@@ -332,7 +333,7 @@ class TM_Settings {
 	}
 
 
-	public function save_settings($post_id) {
+	public function save_settings($post_id, $post) {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
@@ -349,18 +350,16 @@ class TM_Settings {
 			return;
 		}
 
-		if ( !isset($_POST['post_type']) && 'tmcf_settings' != $_POST['post_type'] ) {
+		if ( 'tmcf_settings' !== $post->post_type ) {
 			return;
 		}
 
 
 		if ( isset($_POST['location']) && !empty($_POST['location']) && isset($_POST['tmcf_location_rules']) &&  wp_verify_nonce ( $_POST['tmcf_location_rules'], basename(__FILE__)) ) {
-			error_log('location');
 			update_post_meta( $post_id, 'tmcf_setting_location', implode(',', $_POST['location']));
 		}
 
-		if ( isset($_POST['tmcf_fields']) && !empty($_POST['tmcf_fields']) && isset($_POST['tmcf_setting_fields']) &&  wp_verify_nonce ( $_POST['tmcf_setting_fields'], basename(__FILE__)) ) {
-			error_log('section');			
+		if ( isset($_POST['tmcf_fields']) && !empty($_POST['tmcf_fields']) && isset($_POST['tmcf_setting_fields']) &&  wp_verify_nonce ( $_POST['tmcf_setting_fields'], basename(__FILE__)) ) {	
 			update_post_meta( $post_id, 'tmcf_setting_fields', wp_json_encode($_POST['tmcf_fields']));
 		}
 	}

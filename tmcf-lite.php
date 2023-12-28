@@ -46,6 +46,8 @@ class TMCF {
 		add_shortcode( 'tmcf', [$this, 'frontend_display'] );
 
 		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), [$this, 'action_links'] );
+
+		add_action( 'wp_footer', [$this, 'wp_footer'] );
 	}
 
 	public function action_links( $actions ){
@@ -76,9 +78,11 @@ class TMCF {
 		return;
 	}
 
-	function load_textdomain() {
+	public function load_textdomain() {
     	load_plugin_textdomain( 'tm-gallery', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	}
+
+
 
 }
 

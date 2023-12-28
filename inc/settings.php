@@ -343,7 +343,7 @@ class TM_Settings {
 		
 
 		if ( $is_autosave || $is_revision ) {
-				return;
+			return;
 		}
 
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {

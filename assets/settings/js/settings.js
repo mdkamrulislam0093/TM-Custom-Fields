@@ -85,7 +85,7 @@
 
 				$selectType = $this.parents('.fields-item-wrap').find('.field-type select');
 
-				if ( $selectType != undefined && $selectType.val() == ''  ) {
+				if ( $selectType != undefined && $selectType.val() == '' ) {
 					$selectType.addClass('active');
 				}
 			}

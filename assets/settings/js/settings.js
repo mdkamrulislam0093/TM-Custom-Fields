@@ -42,6 +42,8 @@
 		e.preventDefault();
 
 		$('#TMCF_settings_fields_wrap error').hide();
+		$('#TMCF_settings_fields_wrap').find('.field-type select').removeClass('active');
+
 
 		var $this = $(this);
 		let name = $(this).val();
@@ -80,6 +82,12 @@
 					$this.parents('.fields-item-wrap').find('.key').val(field_key).change();				
 					$this.parents('.fields-item-wrap').find('.copy-key').text('[tmcf key="'+ field_key +'"]');
 				}
+
+				$selectType = $this.parents('.fields-item-wrap').find('.field-type select');
+
+				if ( $selectType != undefined && $selectType.val() == ''  ) {
+					$selectType.addClass('active');
+				}
 			}
 		);
 	});
@@ -87,6 +95,7 @@
 	$('#TMCF_settings_fields_wrap').on('blur', '.fields-wrap .key', function(e){
 		e.preventDefault();
 		$('#TMCF_settings_fields_wrap .error').hide();
+		$('#TMCF_settings_fields_wrap').find('.field-type select').removeClass('active');
 		
 		var $this = $(this);
 		let field_key = $(this).val();
@@ -125,8 +134,20 @@
 						$this.val(field_key);
 						$this.parents('.fields-item-wrap').find('.copy-key').html('<input type="text" value=\'[tmcf key="'+ field_key +'"]\' readonly="">');					
 					}
+
+					$selectType = $this.parents('.fields-item-wrap').find('.field-type select');
+
+					if ( $selectType != undefined && $selectType.val() == ''  ) {
+						$selectType.addClass('active');
+					}					
 				}
 			);
+		}
+	});
+
+	$('#TMCF_settings_fields_wrap').on('change', '.field-type select', function(e){
+		if ( $(this).val() != '' ) {
+			$(this).removeClass('active');
 		}
 	});
 

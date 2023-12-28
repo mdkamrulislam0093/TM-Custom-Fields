@@ -340,7 +340,6 @@ class TM_Settings {
 
 		$is_autosave = wp_is_post_autosave( $post_id );
 		$is_revision = wp_is_post_revision( $post_id );
-		
 
 		if ( $is_autosave || $is_revision ) {
 			return;

@@ -228,3 +228,6 @@
   margin: 0;
   width: 100%;
 }
+#TMCF_settings_fields_wrap .field-type select.active {
+  border: 1px solid red;
+}
